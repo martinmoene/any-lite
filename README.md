@@ -1,4 +1,10 @@
-# any-lite
-single-file header-only type-safe container for single values of any type for C++98 and later
+# any-lite: A single-file header-only version of a C++17-like any, a type-safe container for single values of any type for C++98, C++11 and later
 
-For now, see [here](http://www.eld.leidenuniv.nl/~moene/Home/tips/any/).
+Features:
+
+- Can be used together with [variant-lite](https://github.com/martinmoene/variant-lite) (and later with [optional-lite](https://github.com/martinmoene/optional-lite)).
+
+Current limitations:
+
+- Objects are always allocated dynamically, i.e. there's no small-object optimization for types T for which std::is_nothrow_move_constructible_v<T> is true.
+
