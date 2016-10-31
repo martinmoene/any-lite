@@ -369,9 +369,11 @@ private:
         : held( value )
         {}
 
+#if any_CPP11_OR_GREATER
         holder( ValueType && value )
         : held( std::move( value ) )
         {}
+#endif
 
         virtual std::type_info const & type() const
         {

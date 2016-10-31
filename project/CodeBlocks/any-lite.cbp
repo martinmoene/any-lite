@@ -11,11 +11,18 @@
 				<Option compiler="gcc" />
 			</Target>
 		</Build>
+		<Unit filename="../../.gitattributes" />
+		<Unit filename="../../.gitignore" />
+		<Unit filename="../../.travis.yml" />
+		<Unit filename="../../CHANGES.txt" />
+		<Unit filename="../../CMakeLists.txt" />
 		<Unit filename="../../LICENSE" />
 		<Unit filename="../../README.md" />
+		<Unit filename="../../appveyor.yml" />
 		<Unit filename="../../example/01-example.cpp" />
 		<Unit filename="../../include/nonstd/any-org.hpp" />
 		<Unit filename="../../include/nonstd/any.hpp" />
+		<Unit filename="../../test/CMakeLists.txt" />
 		<Unit filename="../../test/any-lite.t.cpp" />
 		<Unit filename="../../test/any-lite.t.h" />
 		<Unit filename="../../test/any.t.cpp" />
