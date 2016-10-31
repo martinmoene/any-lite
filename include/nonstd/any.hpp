@@ -23,9 +23,9 @@
 
 #define  any_lite_VERSION "0.0.0"
 
-// variant-lite configuration:
+// any-lite configuration:
 
-// variant-lite alignment configuration:
+// any-lite alignment configuration:
 
 // Compiler detection (C++17 is speculative):
 
@@ -76,15 +76,17 @@
 
 #if any_COMPILER_GNUC_VERSION
 # define any_HAVE_TR1_TYPE_TRAITS  1
+# define any_HAVE_TR1_ADD_CONST  1
+# define any_HAVE_TR1_REMOVE_REFERENCE  1
 #endif
 
 #if any_CPP11_OR_GREATER || any_COMPILER_MSVC_VERSION >= 9
 # define any_HAVE_TYPE_TRAITS  1
-# define any_HAVE_ADD_CONST  1
-# define any_HAVE_REMOVE_REFERENCE  1
+# define any_HAVE_STD_ADD_CONST  1
+# define any_HAVE_STD_REMOVE_REFERENCE  1
 #endif
 
-// For the rest, consider VC14 as C++11 for variant-lite:
+// For the rest, consider VC14 as C++11 for any-lite:
 
 #if any_COMPILER_MSVC_VERSION >= 14
 # undef  any_CPP11_OR_GREATER
@@ -136,9 +138,41 @@
 namespace nonstd { namespace any_lite {
 
 namespace detail {
+
+// C++11 emulation:
+
+#if any_HAVE_STD_ADD_CONST
+
+using std::add_const;
+
+#elif any_HAVE_TR1_ADD_CONST
+
+using std::tr1::add_const;
+
+#else
+
+template< class T > struct add_const { typedef const T type; };
+
+#endif // any_HAVE_ADD_CONST
+
+#if any_HAVE_STD_REMOVE_REFERENCE
+
+using std::remove_reference;
+
+#elif any_HAVE_TR1_REMOVE_REFERENCE
+
+using std::tr1::remove_reference;
+
+#else
+
+template< class T > struct remove_reference     { typedef T type; };
+template< class T > struct remove_reference<T&> { typedef T type; };
+
+#endif // any_HAVE_STD_REMOVE_REFERENCE
+
 } // namespace detail
 
-#if ! nonstd_lite_HAVE_IN_PLACE_TYPES 
+#if ! nonstd_lite_HAVE_IN_PLACE_TYPES
 
 namespace detail {
 
@@ -190,34 +224,34 @@ class any
 {
 public:
     any_constexpr any() any_noexcept
-    : content(0)
+    : content( any_nullptr )
     {}
 
-    any( any const & other )
-    : content( other.content ? other.content->clone() : 0 )
+    any( any const & rhs )
+    : content( rhs.content ? rhs.content->clone() : any_nullptr )
     {}
 
 #if any_CPP11_OR_GREATER
 
-    any( any && other) any_noexcept
-    : content( std::move( other.content ) )
+    any( any && rhs ) any_noexcept
+    : content( std::move( rhs.content ) )
     {
-        other.content = any_nullptr;
+        rhs.content = any_nullptr;
     }
 
-    template< class ValueType >
-    any( ValueType && value )
-    : content( new holder<ValueType>( std::forward<ValueType>( value ) ) )
+    template< class ValueType, class T = typename std::decay<ValueType>::type, typename = typename std::enable_if< ! std::is_same<T, any>::value >::type >
+    any( ValueType && value ) any_noexcept
+    : content( new holder<T>( std::forward<ValueType>( value ) ) )
     {}
 
     template< class T, class... Args, typename = typename std::enable_if< std::is_constructible<T, Args...>::value >::type >
     explicit any( nonstd_lite_in_place_type_t(T), Args&&... args )
-    : content( new holder<T>( std::forward<T>( std::forward<Args>(args)... ) ) )
+    : content( new holder<T>( T( std::forward<Args>(args)... ) ) )
     {}
 
     template< class T, class U, class... Args, typename = typename std::enable_if< std::is_constructible<T, std::initializer_list<U>&, Args...>::value >::type >
     explicit any( nonstd_lite_in_place_type_t(T), std::initializer_list<U> il, Args&&... args )
-    : content( new holder<T>( std::forward<T>( il, std::forward<Args>(args)... ) ) )
+    : content( new holder<T>( T( il, std::forward<Args>(args)... ) ) )
     {}
 
 #else
@@ -239,7 +273,7 @@ public:
         any( rhs ).swap( *this );
         return *this;
     }
-    
+
 #if any_CPP11_OR_GREATER
 
     any & operator=( any && rhs ) any_noexcept
@@ -248,7 +282,7 @@ public:
         return *this;
     }
 
-    template< class ValueType > 
+    template< class ValueType, class T = typename std::decay<ValueType>::type, typename = typename std::enable_if< ! std::is_same<T, any>::value >::type >
     any & operator=( ValueType && rhs )
     {
         any( std::forward<ValueType>( rhs ) ).swap( *this );
@@ -258,20 +292,18 @@ public:
     template< class T, class... Args >
     void emplace( Args && ... args )
     {
-        any( std::forward<T>( std::forward<Args>(args)... ) ).swap( *this );
-        return *this;
+        any( T( std::forward<Args>(args)... ) ).swap( *this );
     }
 
     template< class T, class U, class... Args, typename = typename std::enable_if< std::is_constructible<T, std::initializer_list<U>&, Args...>::value >::type >
     void emplace( std::initializer_list<U> il, Args&&... args )
     {
-        any( std::forward<T>( il, std::forward<Args>(args)... ) ).swap( *this );
-        return *this;
+        any( T( il, std::forward<Args>(args)... ) ).swap( *this );
     }
 
 #else
 
-    template< class ValueType > 
+    template< class ValueType >
     any & operator=( ValueType const & rhs )
     {
         any( rhs ).swap( *this );
@@ -279,12 +311,12 @@ public:
     }
 
 #endif // any_CPP11_OR_GREATER
-    
+
     void reset() any_noexcept
     {
         delete content; content = any_nullptr;
     }
-    
+
     void swap( any & rhs ) any_noexcept
     {
         std::swap( content, rhs.content );
@@ -292,12 +324,12 @@ public:
 
     bool has_value() const any_noexcept
     {
-        return ! content;
+        return content != any_nullptr;
     }
 
     const std::type_info & type() const any_noexcept
     {
-        return content ? content->type() : typeid( void );
+        return has_value() ? content->type() : typeid( void );
     }
 
     //
@@ -307,9 +339,15 @@ public:
     template< class ValueType >
     const ValueType * to_ptr() const
     {
-        return type() == typeid(ValueType) ? &static_cast<holder<ValueType> *>( content )->held : 0;
+        return &( static_cast<holder<ValueType> *>( content )->held );
     }
-    
+
+    template< class ValueType >
+    ValueType * to_ptr()
+    {
+        return &( static_cast<holder<ValueType> *>( content )->held );
+    }
+
 private:
     class placeholder
     {
@@ -323,18 +361,21 @@ private:
         virtual placeholder * clone() const = 0;
     };
 
-    template<typename value_type>
+    template< typename ValueType >
     class holder : public placeholder
     {
     public:
-        holder( value_type const & value )
-            : held( value )
-        {
-        }
+        holder( ValueType const & value )
+        : held( value )
+        {}
+
+        holder( ValueType && value )
+        : held( std::move( value ) )
+        {}
 
         virtual std::type_info const & type() const
         {
-            return typeid( value_type );
+            return typeid( ValueType );
         }
 
         virtual placeholder * clone() const
@@ -342,13 +383,13 @@ private:
             return new holder( held );
         }
 
-        const value_type held;
+        ValueType held;
     };
 
     placeholder * content;
 };
 
-void swap( any & x, any & y ) any_noexcept
+inline void swap( any & x, any & y ) any_noexcept
 {
     x.swap( y );
 }
@@ -356,13 +397,13 @@ void swap( any & x, any & y ) any_noexcept
 #if any_CPP11_OR_GREATER
 
 template< class T, class ...Args >
-any make_any( Args&& ...args )
+inline any make_any( Args&& ...args )
 {
     return any( in_place<T>, std::forward<Args>(args)...);
 }
 
 template< class T, class U, class ...Args >
-any make_any( std::initializer_list<U> il, Args&& ...args )
+inline any make_any( std::initializer_list<U> il, Args&& ...args )
 {
     return any( in_place<T>, il, std::forward<Args>(args)...);
 }
@@ -374,13 +415,9 @@ template< class ValueType, typename = typename std::enable_if< std::is_reference
 #else
 template< class ValueType >
 #endif
-ValueType any_cast( any const & operand )
+inline ValueType any_cast( any const & operand )
 {
-#if any_HAVE_ADD_CONST && any_HAVE_REMOVE_REFERENCE
-   const ValueType * result = any_cast< typename std::add_const< typename std::remove_reference<ValueType>::type >::type >( &operand );
-#else
-   const ValueType * result = operand.to_ptr<ValueType>();
-#endif
+   const ValueType * result = any_cast< typename detail::add_const< typename detail::remove_reference<ValueType>::type >::type >( &operand );
 
    if ( ! result )
    {
@@ -395,13 +432,9 @@ template< class ValueType, typename = typename std::enable_if< std::is_reference
 #else
 template< class ValueType >
 #endif
-ValueType any_cast( any & operand )
+inline ValueType any_cast( any & operand )
 {
-#if any_HAVE_ADD_CONST && any_HAVE_REMOVE_REFERENCE
-   const ValueType * result = any_cast< typename std::remove_reference<ValueType>::type >( &operand );
-#else
-   const ValueType * result = operand.to_ptr<ValueType>();
-#endif
+   const ValueType * result = any_cast< typename detail::remove_reference<ValueType>::type >( &operand );
 
    if ( ! result )
    {
@@ -418,13 +451,9 @@ template< class ValueType, typename = typename std::enable_if< std::is_reference
 #else
 template< class ValueType >
 #endif
-ValueType any_cast( any && operand )
+inline ValueType any_cast( any && operand )
 {
-#if any_HAVE_ADD_CONST && any_HAVE_REMOVE_REFERENCE
-   const ValueType * result = any_cast< typename std::remove_reference<ValueType>::type >( &operand );
-#else
-   const ValueType * result = operand.to_ptr<ValueType>();
-#endif
+   const ValueType * result = any_cast< typename detail::remove_reference<ValueType>::type >( &operand );
 
    if ( ! result )
    {
@@ -437,13 +466,13 @@ ValueType any_cast( any && operand )
 #endif // any_CPP11_OR_GREATER
 
 template< class ValueType >
-const ValueType * any_cast( any const * operand ) any_noexcept
+inline ValueType const * any_cast( any const * operand ) any_noexcept
 {
     return operand != any_nullptr && operand->type() == typeid(ValueType) ? operand->to_ptr<ValueType>() : any_nullptr;
 }
 
 template<class ValueType >
-ValueType * any_cast( any * operand ) any_noexcept
+inline ValueType * any_cast( any * operand ) any_noexcept
 {
     return operand != any_nullptr && operand->type() == typeid(ValueType) ? operand->to_ptr<ValueType>() : any_nullptr;
 }
