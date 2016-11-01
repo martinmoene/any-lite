@@ -19,7 +19,10 @@
 		<Unit filename="../../LICENSE" />
 		<Unit filename="../../README.md" />
 		<Unit filename="../../appveyor.yml" />
-		<Unit filename="../../example/01-example.cpp" />
+		<Unit filename="../../example/01-basic.cpp" />
+		<Unit filename="../../example/02-property.cpp" />
+		<Unit filename="../../example/03-example.cpp" />
+		<Unit filename="../../example/04-any-variant.cpp" />
 		<Unit filename="../../include/nonstd/any-org.hpp" />
 		<Unit filename="../../include/nonstd/any.hpp" />
 		<Unit filename="../../test/CMakeLists.txt" />
