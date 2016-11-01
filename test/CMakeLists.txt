@@ -8,11 +8,11 @@ cmake_minimum_required( VERSION 2.8.12 )
 
 project( test )
 
-include_directories  ( "${PROJECT_SOURCE_DIR}/../include/nonstd" )
+include_directories( "${PROJECT_SOURCE_DIR}/../include/nonstd" )
 
 set( SOURCES any-lite.t.cpp any.t.cpp )
 
-add_executable ( any-lite.t ${SOURCES} )
+add_executable( any-lite.t ${SOURCES} )
 
 set( HAS_STD_FLAGS  FALSE )
 set( HAS_CPP11_FLAG FALSE )
