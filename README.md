@@ -95,7 +95,7 @@ Synopsis
 
 | Kind         | Std  | Method                                       | Result |
 |--------------|------|----------------------------------------------|--------|
-| Construction |&nbsp;| any()                                        | default-construct first type      |
+| Construction |&nbsp;| any()                                        | default-construct             |
 | &nbsp;       |&nbsp;| any( any const & rhs )                       | copy-construct from other any |
 | &nbsp;       | C++11| any( any && rhs ) noexcept                   | move-construct from other any |
 | &nbsp;       | C++11| template< class ValueType ><br>any( ValueType && value ) noexcept | move-assign from value |
