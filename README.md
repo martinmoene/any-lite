@@ -116,16 +116,16 @@ Synopsis
 
 ### Algorithms for *any lite*
 
-| Kind                      | Std  | Function |
-|---------------------------|------|----------|
-| Create                    |C++11 | template< class T, class ...Args ><br>any make_any( Args&& ...args ) |
-| &nbsp;                    |C++11 | template< class T, class U, class ...Args ><br>any make_any( std::initializer_list&lt;U> il, Args&& ...args ) |
-| Access                    |&nbsp;| T any_cast<T>( any const & )  |
-| &nbsp;                    |&nbsp;| T any_cast<T>( any & )        |
-| &nbsp;                    |C++11 | T any_cast<T>( any && )       |
-| &nbsp;                    |&nbsp;| T const \* any_cast<T>( any const * )  |
-| &nbsp;                    |&nbsp;| T \* any_cast<T>( any * )        |
-| Swap                      |&nbsp;| void swap( any & x, any & y ) |
+| Kind                      | Std  | Function | Result |
+|---------------------------|------|----------|--------|
+| Create                    |C++11 | template< class T, class ...Args ><br>any make_any( Args&& ...args ) | in-place construct |
+| &nbsp;                    |C++11 | template< class T, class U, class ...Args ><br>any make_any( std::initializer_list&lt;U> il, Args&& ...args ) | in-place construct |
+| Access                    |&nbsp;| T any_cast<T>( any const & )  | obtained value |
+| &nbsp;                    |&nbsp;| T any_cast<T>( any & )        | obtained value |
+| &nbsp;                    |C++11 | T any_cast<T>( any && )       | obtained value |
+| &nbsp;                    |&nbsp;| T const \* any_cast<T>( any const * )  | pointer to obtained value |
+| &nbsp;                    |&nbsp;| T \* any_cast<T>( any * )     | pointer to obtained value |
+| Swap                      |&nbsp;| void swap( any & x, any & y ) | exchange contents |
 
 ### Configuration macros
 
