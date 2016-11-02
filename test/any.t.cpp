@@ -205,9 +205,6 @@ CASE( "any: Allows to in-place copy-construct from value (C++11)" )
 #endif
 }
 
-template< typename T >
-void foo( T && v ){}
-
 CASE( "any: Allows to in-place move-construct from value (C++11)" )
 {
 #if any_CPP11_OR_GREATER
@@ -216,8 +213,6 @@ CASE( "any: Allows to in-place move-construct from value (C++11)" )
 
     any a( in_place<pair_t>, c, std::move(v) );
     
-    foo( std::move( v ) );
-
     EXPECT( any_cast<pair_t>( a ).first        == 'a' );
     EXPECT( any_cast<pair_t>( a ).second.value ==  7  );
     EXPECT( any_cast<pair_t>( a ).second.state == copy_constructed );
