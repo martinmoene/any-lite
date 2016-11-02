@@ -186,17 +186,19 @@ Other implementations of any
 
 Notes and References
 --------------------
-[1] Beman Dawes and Kevlin Henney. [N3508: Any Library Proposal (Revision 2)](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3508.html). January 2013.
+[1] CppReference. [Any](http://en.cppreference.com/w/cpp/utility/any).  
 
-[2] Kevlin Henney. [Boost.Any](http://www.boost.org/doc/libs/1_62_0/doc/html/any.html). Safe, generic container for single values of different value types. 2001.
+[2] ISO/IEC WG21. [N4606, section 20.8 Storage for any type](http://wg21.link/n4606). July 2016.
 
-[3] Kevlin Henney. [Valued Conversions](http://www.two-sdg.demon.co.uk/curbralan/papers/ValuedConversions.pdf) (PDF). C++ report, July, August 2000.
+[3] Beman Dawes and Kevlin Henney. [N3508: Any Library Proposal (Revision 2)](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3508.html). January 2013.
 
-[4] Kevlin Henney. [Substitutability. Principles, Idioms and Techniques for C++](http://www.two-sdg.demon.co.uk/curbralan/papers/accu/Substitutability.pdf#page=60) (PDF). Presented at JaCC, Oxford, 16th September 1999.
+[4] Kevlin Henney. [Boost.Any](http://www.boost.org/doc/libs/1_62_0/doc/html/any.html). Safe, generic container for single values of different value types. 2001.
 
-[5] Kevlin Henney. [Idioms. Breaking the Language Barrier](http://www.two-sdg.demon.co.uk/curbralan/papers/accu/Idioms.pdf#page=32) (PDF). Presented at the ACCU's C and C++ European Developers Forum, the Oxford Union, Oxford, UK, 12th September 1998.
+[5] Kevlin Henney. [Valued Conversions](http://www.two-sdg.demon.co.uk/curbralan/papers/ValuedConversions.pdf) (PDF). C++ report, July, August 2000.
 
-### References
+[6] Kevlin Henney. [Substitutability. Principles, Idioms and Techniques for C++](http://www.two-sdg.demon.co.uk/curbralan/papers/accu/Substitutability.pdf#page=60) (PDF). Presented at JaCC, Oxford, 16th September 1999.
+
+[7] Kevlin Henney. [Idioms. Breaking the Language Barrier](http://www.two-sdg.demon.co.uk/curbralan/papers/accu/Idioms.pdf#page=32) (PDF). Presented at the ACCU's C and C++ European Developers Forum, the Oxford Union, Oxford, UK, 12th September 1998.
 
 
 Appendix
