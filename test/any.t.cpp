@@ -444,7 +444,7 @@ CASE( "swap: Allows to swap with other any (non-member)" )
     EXPECT( any_cast<int>( b ) == 1 );
 }
 
-CASE( "make_any: Allows to in-place copy-construct any from arguments via make_any() (C++11)" )
+CASE( "make_any: Allows to in-place copy-construct any from arguments (C++11)" )
 {
 #if any_CPP11_OR_GREATER
     using pair_t = std::pair<char, S>;
@@ -461,7 +461,7 @@ CASE( "make_any: Allows to in-place copy-construct any from arguments via make_a
 #endif
 }
 
-CASE( "make_any: Allows to in-place move-construct any from arguments via make_any() (C++11)" )
+CASE( "make_any: Allows to in-place move-construct any from arguments (C++11)" )
 {
 #if any_CPP11_OR_GREATER
     using pair_t = std::pair<char, S>;
@@ -478,7 +478,7 @@ CASE( "make_any: Allows to in-place move-construct any from arguments via make_a
 #endif
 }
 
-CASE( "make_any: Allows to in-place copy-construct any from initializer-list via make_any() (C++11)" )
+CASE( "make_any: Allows to in-place copy-construct any from initializer-list and arguments (C++11)" )
 {
 #if any_CPP11_OR_GREATER
     S s( 7 );
@@ -496,7 +496,7 @@ CASE( "make_any: Allows to in-place copy-construct any from initializer-list via
 #endif
 }
 
-CASE( "make_any: Allows to in-place move-construct any from initializer-list via make_any() (C++11)" )
+CASE( "make_any: Allows to in-place move-construct any from initializer-list and arguments (C++11)" )
 {
 #if any_CPP11_OR_GREATER
     S s( 7 );

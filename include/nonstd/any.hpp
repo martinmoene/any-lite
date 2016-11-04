@@ -136,13 +136,13 @@
 #endif
 
 //
-// in_place: code duplicated in any-lite and optional-lite (todo):
+// in_place: code duplicated in any-lite, optional-lite, variant-lite:
 //
 
 #if ! nonstd_lite_HAVE_IN_PLACE_TYPES
 
-namespace nonstd { 
-    
+namespace nonstd {
+
 namespace detail {
 
 template< class T >
