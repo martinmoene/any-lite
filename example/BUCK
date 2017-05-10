@@ -1,0 +1,50 @@
+cxx_binary(
+  name = '01-basic',
+  srcs = [
+    '01-basic.cpp',
+  ],
+  compiler_flags = [
+    '-std=c++11',
+  ],
+  deps = [
+    '//:any-lite',
+  ],
+)
+cxx_binary(
+  name = '02-property',
+  srcs = [
+    '02-property.cpp',
+  ],
+  compiler_flags = [
+    '-std=c++11',
+  ],
+  deps = [
+    '//:any-lite',
+  ],
+)
+
+cxx_binary(
+  name = '03-example',
+  srcs = [
+    '03-example.cpp',
+  ],
+  compiler_flags = [
+    '-std=c++11',
+  ],
+  deps = [
+    '//:any-lite',
+  ],
+)
+
+cxx_binary(
+  name = '04-any-variant',
+  srcs = [
+    '04-any-variant.cpp',
+  ],
+  compiler_flags = [
+    '-std=c++11',
+  ],
+  deps = [
+    '//:any-lite',
+  ],
+)
