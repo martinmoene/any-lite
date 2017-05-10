@@ -150,31 +150,39 @@ Building the tests
 ------------------
 To build the tests you need:
 
-- [CMake](http://cmake.org), version 2.8.12 or later to be installed and in your PATH.
+- [Buck](https://buckbuild.com/) or [CMake](http://cmake.org) version 2.8.12 or later to be installed and in your PATH.
 - A [suitable compiler](#reported-to-work-with).
 
 The [*lest* test framework](https://github.com/martinmoene/lest)  is included in the [test folder](test).
 
 The following steps assume that the [*any lite* source code](https://github.com/martinmoene/any-lite) has been cloned into a directory named `c:\any-lite`.
 
+### Buck
+
+```
+any-lite> buck run test/
+```
+
+### CMake
+
 1. Create a directory for the build outputs for a particular architecture.
 Here we use c:\any-lite\build-win-x86-vc10.
 
-        cd c:\any-lite
-        md build-win-x86-vc10
-        cd build-win-x86-vc10
+        ~> cd c:\any-lite
+        any-lite> md build-win-x86-vc10
+        any-lite> cd build-win-x86-vc10
 
 2. Configure CMake to use the compiler of your choice (run `cmake --help` for a list).
 
-        cmake -G "Visual Studio 10 2010" ..
+        any-lite\build> cmake -G "Visual Studio 10 2010" ..
 
 3. Build the test suite in the Debug configuration (alternatively use Release).    
 
-        cmake --build . --config Debug
+        any-lite\build> cmake --build . --config Debug
 
 4. Run the test suite.    
 
-        ctest -V -C Debug
+        any-lite\build> ctest -V -C Debug
 
 All tests should pass, indicating your platform is supported and you are ready to use *any lite*.
 
