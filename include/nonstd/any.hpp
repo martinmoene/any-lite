@@ -18,20 +18,50 @@
 #ifndef NONSTD_ANY_LITE_HPP
 #define NONSTD_ANY_LITE_HPP
 
-#include <typeinfo>
-#include <utility>
-
-#define  any_lite_VERSION "0.0.0"
+#define  any_lite_VERSION "0.1.0"
 
 // any-lite configuration:
 
 // any-lite alignment configuration:
 
-// Compiler detection (C++17 is speculative):
+// Compiler detection:
 
 #define any_CPP11_OR_GREATER  ( __cplusplus >= 201103L )
 #define any_CPP14_OR_GREATER  ( __cplusplus >= 201402L )
-#define any_CPP17_OR_GREATER  ( __cplusplus >= 201700L )
+#define any_CPP17_OR_GREATER  ( __cplusplus >= 201703L )
+
+// use C++17 std::any if available:
+
+#if defined( __has_include )
+# define any_HAS_INCLUDE( arg )  __has_include( arg )
+#else
+# define any_HAS_INCLUDE( arg )  0
+#endif
+
+#if any_HAS_INCLUDE( <any> ) && any_CPP17_OR_GREATER
+
+#define any_HAVE_STD_ANY  1
+
+#include <any>
+
+namespace nonstd {
+
+    using std::any;
+    using std::any_cast;
+    using std::make_any;
+    using std::swap;
+    using std::bad_any_cast;
+
+    using std::in_place;
+    using std::in_place_type;
+    using std::in_place_t;
+    using std::in_place_type_t;
+};
+
+#else // C++17 std::any
+
+#include <typeinfo>
+#include <utility>
 
 // half-open range [lo..hi):
 #define any_BETWEEN( v, lo, hi ) ( lo <= v && v < hi )
@@ -167,6 +197,18 @@ inline in_place_t in_place( detail::in_place_index_tag<I> = detail::in_place_ind
     return in_place_t();
 }
 
+template< class T >
+inline in_place_t in_place_type( detail::in_place_type_tag<T> = detail::in_place_type_tag<T>() )
+{
+    return in_place_t();
+}
+
+template< std::size_t I >
+inline in_place_t in_place_index( detail::in_place_index_tag<I> = detail::in_place_index_tag<I>() )
+{
+    return in_place_t();
+}
+
 // mimic templated typedef:
 
 #define nonstd_lite_in_place_type_t( T)  nonstd::in_place_t(&)( nonstd::detail::in_place_type_tag<T>  )
@@ -253,7 +295,7 @@ public:
 
     template< class ValueType, class T = typename std::decay<ValueType>::type, typename = typename std::enable_if< ! std::is_same<T, any>::value >::type >
     any( ValueType && value ) any_noexcept
-    : content( new holder<T>( std::forward<ValueType>( value ) ) )
+    : content( new holder<T>( std::move( value ) ) )
     {}
 
     template< class T, class... Args, typename = typename std::enable_if< std::is_constructible<T, Args...>::value >::type >
@@ -297,7 +339,7 @@ public:
     template< class ValueType, class T = typename std::decay<ValueType>::type, typename = typename std::enable_if< ! std::is_same<T, any>::value >::type >
     any & operator=( ValueType && rhs )
     {
-        any( std::forward<ValueType>( rhs ) ).swap( *this );
+        any( std::move( rhs ) ).swap( *this );
         return *this;
     }
 
@@ -496,5 +538,7 @@ inline ValueType * any_cast( any * operand ) any_noexcept
 using namespace any_lite;
 
 } // namespace nonstd
+
+#endif // have C++17 std::any
 
 #endif // NONSTD_ANY_LITE_HPP
