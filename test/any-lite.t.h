@@ -18,22 +18,21 @@ using namespace nonstd;
 
 extern lest::tests & specification();
 
-namespace nonstd { namespace any_lite {
+namespace nonstd {
 
 // use oparator<< instead of to_string() overload;
 // see  http://stackoverflow.com/a/10651752/437272
 
-inline std::ostream & operator<<( std::ostream & os, nonstd::any_lite::any const & v )
+inline std::ostream & operator<<( std::ostream & os, nonstd::any const & v )
 {
-    os << "[any:";
-    return os << "]";
+    return os << "[any:]";
 }
 
-}}
+}
 
 namespace lest {
 
-using ::nonstd::any_lite::operator<<;
+using ::nonstd::operator<<;
 
 } // namespace lest
 

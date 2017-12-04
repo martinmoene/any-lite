@@ -15,11 +15,13 @@
 
 #include "any-lite.t.h"
 
+// Note: use any_cast( ptr-to-any ) to preserve move-state.
+
 namespace {
 
 // ensure comparison of pointers for lest:
 
-const void * lest_nullptr = 0;
+//const void * lest_nullptr = 0;
 
 // The following tracer code originates as Oracle from Optional by
 // Andrzej Krzemienski, https://github.com/akrzemi1/Optional.
@@ -74,14 +76,14 @@ struct S
     S & operator=( const S & s ) { state = copy_assigned      ; value = s.value; return *this; }
 
 #if any_CPP11_OR_GREATER
-    S(             V && v ) : state(  value_move_constructed ), value(  std::move( v ) ) { v.state = moved_from; }
+    S(             V && v ) : state(  value_move_constructed ), value(  std::move( v )     ) { v.state = moved_from; }
     S(             S && s ) : state(  move_constructed       ), value(  std::move( s.value ) ) { s.state = moved_from; }
 
-    S & operator=( V && v ) { state = value_move_assigned     ; value = std::move( v ); v.state = moved_from; return *this; }
+    S & operator=( V && v ) { state = value_move_assigned     ; value = std::move( v       ); v.state = moved_from; return *this; }
     S & operator=( S && s ) { state = move_assigned           ; value = std::move( s.value ); s.state = moved_from; return *this; }
 #endif
 
-    bool operator==( S const & other ) const { return state == other.state && value == other.value; }
+    bool operator==( S const & rhs ) const { return state == rhs.state && value == rhs.value; }
 };
 
 inline std::ostream & operator<<( std::ostream & os, V const & v )
@@ -107,7 +109,7 @@ struct InitList
     : vec( il ), c( c ), s( s ) {}
 
     InitList( std::initializer_list<int> il, char c, S && s)
-    : vec( il ), c( c ), s( std::forward<S>(s) ) {}
+    : vec( il ), c( c ), s( std::move(s) ) {}
 };
 #endif
 
@@ -167,8 +169,9 @@ CASE( "any: Allows to move-construct from value (C++11)" )
     S s( 7 );
     any a( std::move( s ) );
 
-    EXPECT( any_cast<S>( a ).value.value == 7          );
-    EXPECT(                s.state       == moved_from );
+    EXPECT( any_cast<S>( &a )->value.value == 7          );
+    EXPECT( any_cast<S>( &a )->state == move_constructed );
+    EXPECT(                  s.state == moved_from       );
 #else
     EXPECT( !!"any: move-construction is not available (no C++11)" );
 #endif
@@ -179,8 +182,12 @@ CASE( "any: Allows to in-place construct from literal value (C++11)" )
 #if any_CPP11_OR_GREATER
     using pair_t = std::pair<char, int>;
 
-    any a( in_place<pair_t>, 'a', 7 );
-
+#if any_HAVE_STD_ANY // or any-lite
+    any a( in_place_type<pair_t>, 'a', 7 );
+#else
+    any _( in_place_type<pair_t>, 'a', 7 );
+    any a( in_place<     pair_t>, 'a', 7 );
+#endif
     EXPECT( any_cast<pair_t>( a ).first  == 'a' );
     EXPECT( any_cast<pair_t>( a ).second ==  7  );
 #else
@@ -194,12 +201,17 @@ CASE( "any: Allows to in-place copy-construct from value (C++11)" )
     char c = 'a'; V v( 7 );
     using pair_t = std::pair<char, V>;
 
-    any a( in_place<pair_t>, c, v );
+#if any_HAVE_STD_ANY // or any-lite
+    any a( in_place_type<pair_t>, c, v );
+#else
+    any _( in_place_type<pair_t>, c, v );
+    any a( in_place<     pair_t>, c, v );
+#endif
 
-    EXPECT( any_cast<pair_t>( a ).first        == 'a' );
-    EXPECT( any_cast<pair_t>( a ).second.value ==  7  );
-    EXPECT( any_cast<pair_t>( a ).second.state == copy_constructed );
-    EXPECT(                            v.state != moved_from       );
+    EXPECT( any_cast<pair_t>( &a )->first        == 'a' );
+    EXPECT( any_cast<pair_t>( &a )->second.value ==  7  );
+    EXPECT( any_cast<pair_t>( &a )->second.state == copy_constructed );
+    EXPECT(                              v.state != moved_from       );
 #else
     EXPECT( !!"any: in-place construction is not available (no C++11)" );
 #endif
@@ -211,12 +223,16 @@ CASE( "any: Allows to in-place move-construct from value (C++11)" )
     char c = 'a'; V v( 7 );
     using pair_t = std::pair<char, V>;
 
-    any a( in_place<pair_t>, c, std::move(v) );
-    
-    EXPECT( any_cast<pair_t>( a ).first        == 'a' );
-    EXPECT( any_cast<pair_t>( a ).second.value ==  7  );
-    EXPECT( any_cast<pair_t>( a ).second.state == copy_constructed );
-    EXPECT(                            v.state == moved_from       );
+#if any_HAVE_STD_ANY // or any-lite
+    any a( in_place_type<pair_t>, c, std::move(v) );
+#else
+//  any _( in_place_type<pair_t>, c, std::move(v) );
+    any a( in_place<     pair_t>, c, std::move(v) );
+#endif    
+    EXPECT( any_cast<pair_t>( &a )->first        == 'a' );
+    EXPECT( any_cast<pair_t>( &a )->second.value ==  7  );
+    EXPECT( any_cast<pair_t>( &a )->second.state == move_constructed );
+    EXPECT(                              v.state == moved_from       );
 #else
     EXPECT( !!"any: in-place construction is not available (no C++11)" );
 #endif
@@ -226,15 +242,20 @@ CASE( "any: Allows to in-place copy-construct from initializer-list (C++11)" )
 {
 #if any_CPP11_OR_GREATER
     S s( 7 );
-    any a( in_place<InitList>, { 7, 8, 9, }, 'a', s );
+#if any_HAVE_STD_ANY // or any-lite
+    any a( in_place_type<InitList>, { 7, 8, 9, }, 'a', s );
+#else
+    any _( in_place_type<InitList>, { 7, 8, 9, }, 'a', s );
+    any a( in_place<     InitList>, { 7, 8, 9, }, 'a', s );
+#endif    
 
-    EXPECT( any_cast<InitList>( a ).vec[0]  ==  7  );
-    EXPECT( any_cast<InitList>( a ).vec[1]  ==  8  );
-    EXPECT( any_cast<InitList>( a ).vec[2]  ==  9  );
-    EXPECT( any_cast<InitList>( a ).c       == 'a' );
-    EXPECT( any_cast<InitList>( a ).s.value.value ==  7               );
-    EXPECT( any_cast<InitList>( a ).s.state       == copy_constructed );
-    EXPECT(                         s.state       != moved_from       );
+    EXPECT( any_cast<InitList>( &a )->vec[0]  ==  7  );
+    EXPECT( any_cast<InitList>( &a )->vec[1]  ==  8  );
+    EXPECT( any_cast<InitList>( &a )->vec[2]  ==  9  );
+    EXPECT( any_cast<InitList>( &a )->c       == 'a' );
+    EXPECT( any_cast<InitList>( &a )->s.value.value ==  7               );
+    EXPECT( any_cast<InitList>( &a )->s.state       == copy_constructed );
+    EXPECT(                           s.state       != moved_from       );
 #else
     EXPECT( !!"any: in-place construction is not available (no C++11)" );
 #endif
@@ -244,16 +265,21 @@ CASE( "any: Allows to in-place move-construct from initializer-list (C++11)" )
 {
 #if any_CPP11_OR_GREATER
     S s( 7 );
-    any a( in_place<InitList>, { 7, 8, 9, }, 'a', std::move(s) );
+#if any_HAVE_STD_ANY // or any-lite
+    any a( in_place_type<InitList>, { 7, 8, 9, }, 'a', std::move(s) );
+#else
+//  any _( in_place_type<InitList>, { 7, 8, 9, }, 'a', std::move(s) );
+    any a( in_place<     InitList>, { 7, 8, 9, }, 'a', std::move(s) );
+#endif    
 
-    EXPECT( any_cast<InitList>( a ).vec[0]  ==  7  );
-    EXPECT( any_cast<InitList>( a ).vec[1]  ==  8  );
-    EXPECT( any_cast<InitList>( a ).vec[2]  ==  9  );
-    EXPECT( any_cast<InitList>( a ).c       == 'a' );
-    EXPECT( any_cast<InitList>( a ).s.value.value == 7                );
-    EXPECT( any_cast<InitList>( a ).s.state       == copy_constructed );
-    EXPECT(                         s.state       == moved_from       );
-    EXPECT(                         s.value.state == moved_from       );
+    EXPECT( any_cast<InitList>( &a )->vec[0]  ==  7  );
+    EXPECT( any_cast<InitList>( &a )->vec[1]  ==  8  );
+    EXPECT( any_cast<InitList>( &a )->vec[2]  ==  9  );
+    EXPECT( any_cast<InitList>( &a )->c       == 'a' );
+    EXPECT( any_cast<InitList>( &a )->s.value.value == 7                );
+    EXPECT( any_cast<InitList>( &a )->s.state       == move_constructed );
+    EXPECT(                           s.state       == moved_from       );
+    EXPECT(                           s.value.state == moved_from       );
 #else
     EXPECT( !!"any: in-place construction is not available (no C++11)" );
 #endif
@@ -309,9 +335,9 @@ CASE( "any: Allows to move-assign from value (C++11)" )
 
     a = std::move( v );
 
-    EXPECT( any_cast<V>( a ).value == 7                );
-    EXPECT( any_cast<V>( a ).state == copy_constructed );
-    EXPECT(                v.state == moved_from       );
+    EXPECT( any_cast<V>( &a )->value == 7                );
+    EXPECT( any_cast<V>( &a )->state == move_constructed );
+    EXPECT(                  v.state == moved_from       );
 #else
     EXPECT( !!"any: in-place construction is not available (no C++11)" );
 #endif
@@ -326,10 +352,10 @@ CASE( "any: Allows to copy-emplace content (C++11)" )
 
     a.emplace<pair_t>( 'a', v );
 
-    EXPECT( any_cast<pair_t>( a ).first        == 'a'              );
-    EXPECT( any_cast<pair_t>( a ).second.value ==  7               );
-    EXPECT( any_cast<pair_t>( a ).second.state == copy_constructed );
-    EXPECT(                            v.state != moved_from       );
+    EXPECT( any_cast<pair_t>( &a )->first        == 'a'              );
+    EXPECT( any_cast<pair_t>( &a )->second.value ==  7               );
+    EXPECT( any_cast<pair_t>( &a )->second.state == copy_constructed );
+    EXPECT(                              v.state != moved_from       );
 #else
     EXPECT( !!"any: in-place construction is not available (no C++11)" );
 #endif
@@ -344,10 +370,10 @@ CASE( "any: Allows to move-emplace content (C++11)" )
 
     a.emplace<pair_t>( 'a', std::move( v ) );
 
-    EXPECT( any_cast<pair_t>( a ).first        == 'a'              );
-    EXPECT( any_cast<pair_t>( a ).second.value ==  7               );
-    EXPECT( any_cast<pair_t>( a ).second.state == copy_constructed );
-    EXPECT(                            v.state == moved_from       );
+    EXPECT( any_cast<pair_t>( &a )->first        == 'a'              );
+    EXPECT( any_cast<pair_t>( &a )->second.value ==  7               );
+    EXPECT( any_cast<pair_t>( &a )->second.state == move_constructed );
+    EXPECT(                              v.state == moved_from       );
 #else
     EXPECT( !!"any: in-place construction is not available (no C++11)" );
 #endif
@@ -361,13 +387,13 @@ CASE( "any: Allows to copy-emplace content from intializer-list (C++11)" )
 
     a.emplace<InitList>( { 7, 8, 9, }, 'a', s );
 
-    EXPECT( any_cast<InitList>( a ).vec[0]  ==  7  );
-    EXPECT( any_cast<InitList>( a ).vec[1]  ==  8  );
-    EXPECT( any_cast<InitList>( a ).vec[2]  ==  9  );
-    EXPECT( any_cast<InitList>( a ).c       == 'a' );
-    EXPECT( any_cast<InitList>( a ).s.value.value ==  7               );
-    EXPECT( any_cast<InitList>( a ).s.state       == copy_constructed );
-    EXPECT(                         s.state       != moved_from       );
+    EXPECT( any_cast<InitList>( &a )->vec[0]  ==  7  );
+    EXPECT( any_cast<InitList>( &a )->vec[1]  ==  8  );
+    EXPECT( any_cast<InitList>( &a )->vec[2]  ==  9  );
+    EXPECT( any_cast<InitList>( &a )->c       == 'a' );
+    EXPECT( any_cast<InitList>( &a )->s.value.value ==  7               );
+    EXPECT( any_cast<InitList>( &a )->s.state       == copy_constructed );
+    EXPECT(                           s.state       != moved_from       );
 #else
     EXPECT( !!"any: in-place construction is not available (no C++11)" );
 #endif
@@ -381,13 +407,13 @@ CASE( "any: Allows to move-emplace content from intializer-list (C++11)" )
 
     a.emplace<InitList>( { 7, 8, 9, }, 'a', std::move( s ) );
 
-    EXPECT( any_cast<InitList>( a ).vec[0]  ==  7  );
-    EXPECT( any_cast<InitList>( a ).vec[1]  ==  8  );
-    EXPECT( any_cast<InitList>( a ).vec[2]  ==  9  );
-    EXPECT( any_cast<InitList>( a ).c       == 'a' );
-    EXPECT( any_cast<InitList>( a ).s.value.value ==  7               );
-    EXPECT( any_cast<InitList>( a ).s.state       == copy_constructed );
-    EXPECT(                         s.state       == moved_from       );
+    EXPECT( any_cast<InitList>( &a )->vec[0]  ==  7  );
+    EXPECT( any_cast<InitList>( &a )->vec[1]  ==  8  );
+    EXPECT( any_cast<InitList>( &a )->vec[2]  ==  9  );
+    EXPECT( any_cast<InitList>( &a )->c       == 'a' );
+    EXPECT( any_cast<InitList>( &a )->s.value.value ==  7               );
+    EXPECT( any_cast<InitList>( &a )->s.state       == move_constructed );
+    EXPECT(                           s.state       == moved_from       );
 #else
     EXPECT( !!"any: in-place construction is not available (no C++11)" );
 #endif
@@ -452,10 +478,10 @@ CASE( "make_any: Allows to in-place copy-construct any from arguments (C++11)" )
     S s( 7 );
     any a = make_any<pair_t>( 'a', s );
 
-    EXPECT( any_cast<pair_t>( a ).first              == 'a' );
-    EXPECT( any_cast<pair_t>( a ).second.value.value ==  7  );
-    EXPECT( any_cast<pair_t>( a ).second.state       == copy_constructed );
-    EXPECT(                            s.state       != moved_from       );
+    EXPECT( any_cast<pair_t>( &a )->first              == 'a' );
+    EXPECT( any_cast<pair_t>( &a )->second.value.value ==  7  );
+    EXPECT( any_cast<pair_t>( &a )->second.state       == copy_constructed );
+    EXPECT(                              s.state       != moved_from       );
 #else
     EXPECT( !!"any: in-place construction is not available (no C++11)" );
 #endif
@@ -469,10 +495,10 @@ CASE( "make_any: Allows to in-place move-construct any from arguments (C++11)" )
     
     any a = make_any<pair_t>( 'a', std::move( s ) );
 
-    EXPECT( any_cast<pair_t>( a ).first              == 'a' );
-    EXPECT( any_cast<pair_t>( a ).second.value.value ==  7  );
-    EXPECT( any_cast<pair_t>( a ).second.state       ==  copy_constructed );
-    EXPECT(                            s.state       ==  moved_from       );
+    EXPECT( any_cast<pair_t>( &a )->first              == 'a' );
+    EXPECT( any_cast<pair_t>( &a )->second.value.value ==  7  );
+    EXPECT( any_cast<pair_t>( &a )->second.state       ==  move_constructed );
+    EXPECT(                              s.state       ==  moved_from       );
 #else
     EXPECT( !!"any: in-place construction is not available (no C++11)" );
 #endif
@@ -484,13 +510,13 @@ CASE( "make_any: Allows to in-place copy-construct any from initializer-list and
     S s( 7 );
     any a = make_any<InitList>( { 7, 8, 9, }, 'a', s );
 
-    EXPECT( any_cast<InitList>( a ).vec[0]  ==  7  );
-    EXPECT( any_cast<InitList>( a ).vec[1]  ==  8  );
-    EXPECT( any_cast<InitList>( a ).vec[2]  ==  9  );
-    EXPECT( any_cast<InitList>( a ).c       == 'a' );
-    EXPECT( any_cast<InitList>( a ).s.value.value ==  7               );
-    EXPECT( any_cast<InitList>( a ).s.state       == copy_constructed );
-    EXPECT(                         s.state       != moved_from       );
+    EXPECT( any_cast<InitList>( &a )->vec[0]  ==  7  );
+    EXPECT( any_cast<InitList>( &a )->vec[1]  ==  8  );
+    EXPECT( any_cast<InitList>( &a )->vec[2]  ==  9  );
+    EXPECT( any_cast<InitList>( &a )->c       == 'a' );
+    EXPECT( any_cast<InitList>( &a )->s.value.value ==  7               );
+    EXPECT( any_cast<InitList>( &a )->s.state       == copy_constructed );
+    EXPECT(                           s.state       != moved_from       );
 #else
     EXPECT( !!"any: in-place construction is not available (no C++11)" );
 #endif
@@ -502,13 +528,13 @@ CASE( "make_any: Allows to in-place move-construct any from initializer-list and
     S s( 7 );
     any a = make_any<InitList>( { 7, 8, 9, }, 'a', std::move( s ) );
 
-    EXPECT( any_cast<InitList>( a ).vec[0]  ==  7  );
-    EXPECT( any_cast<InitList>( a ).vec[1]  ==  8  );
-    EXPECT( any_cast<InitList>( a ).vec[2]  ==  9  );
-    EXPECT( any_cast<InitList>( a ).c       == 'a' );
-    EXPECT( any_cast<InitList>( a ).s.value.value ==  7               );
-    EXPECT( any_cast<InitList>( a ).s.state       == copy_constructed );
-    EXPECT(                         s.state       == moved_from       );
+    EXPECT( any_cast<InitList>( &a )->vec[0]  ==  7  );
+    EXPECT( any_cast<InitList>( &a )->vec[1]  ==  8  );
+    EXPECT( any_cast<InitList>( &a )->vec[2]  ==  9  );
+    EXPECT( any_cast<InitList>( &a )->c       == 'a' );
+    EXPECT( any_cast<InitList>( &a )->s.value.value ==  7               );
+    EXPECT( any_cast<InitList>( &a )->s.state       == move_constructed );
+    EXPECT(                           s.state       == moved_from       );
 #else
     EXPECT( !!"any: in-place construction is not available (no C++11)" );
 #endif
