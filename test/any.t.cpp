@@ -210,7 +210,11 @@ CASE( "any: Allows to in-place copy-construct from value (C++11)" )
 
     EXPECT( any_cast<pair_t>( &a )->first        == 'a' );
     EXPECT( any_cast<pair_t>( &a )->second.value ==  7  );
+#if any_HAVE_STD_ANY
     EXPECT( any_cast<pair_t>( &a )->second.state == copy_constructed );
+#else
+    EXPECT( any_cast<pair_t>( &a )->second.state == move_constructed );
+#endif
     EXPECT(                              v.state != moved_from       );
 #else
     EXPECT( !!"any: in-place construction is not available (no C++11)" );
@@ -254,7 +258,11 @@ CASE( "any: Allows to in-place copy-construct from initializer-list (C++11)" )
     EXPECT( any_cast<InitList>( &a )->vec[2]  ==  9  );
     EXPECT( any_cast<InitList>( &a )->c       == 'a' );
     EXPECT( any_cast<InitList>( &a )->s.value.value ==  7               );
+#if any_HAVE_STD_ANY
     EXPECT( any_cast<InitList>( &a )->s.state       == copy_constructed );
+#else
+    EXPECT( any_cast<InitList>( &a )->s.state       == move_constructed );
+#endif
     EXPECT(                           s.state       != moved_from       );
 #else
     EXPECT( !!"any: in-place construction is not available (no C++11)" );
@@ -354,7 +362,11 @@ CASE( "any: Allows to copy-emplace content (C++11)" )
 
     EXPECT( any_cast<pair_t>( &a )->first        == 'a'              );
     EXPECT( any_cast<pair_t>( &a )->second.value ==  7               );
+#if any_HAVE_STD_ANY
     EXPECT( any_cast<pair_t>( &a )->second.state == copy_constructed );
+#else
+    EXPECT( any_cast<pair_t>( &a )->second.state == move_constructed );
+#endif
     EXPECT(                              v.state != moved_from       );
 #else
     EXPECT( !!"any: in-place construction is not available (no C++11)" );
@@ -392,7 +404,11 @@ CASE( "any: Allows to copy-emplace content from intializer-list (C++11)" )
     EXPECT( any_cast<InitList>( &a )->vec[2]  ==  9  );
     EXPECT( any_cast<InitList>( &a )->c       == 'a' );
     EXPECT( any_cast<InitList>( &a )->s.value.value ==  7               );
+#if any_HAVE_STD_ANY
     EXPECT( any_cast<InitList>( &a )->s.state       == copy_constructed );
+#else
+    EXPECT( any_cast<InitList>( &a )->s.state       == move_constructed );
+#endif
     EXPECT(                           s.state       != moved_from       );
 #else
     EXPECT( !!"any: in-place construction is not available (no C++11)" );
@@ -480,7 +496,11 @@ CASE( "make_any: Allows to in-place copy-construct any from arguments (C++11)" )
 
     EXPECT( any_cast<pair_t>( &a )->first              == 'a' );
     EXPECT( any_cast<pair_t>( &a )->second.value.value ==  7  );
+#if any_HAVE_STD_ANY
     EXPECT( any_cast<pair_t>( &a )->second.state       == copy_constructed );
+#else
+    EXPECT( any_cast<pair_t>( &a )->second.state       == move_constructed );
+#endif
     EXPECT(                              s.state       != moved_from       );
 #else
     EXPECT( !!"any: in-place construction is not available (no C++11)" );
@@ -515,7 +535,11 @@ CASE( "make_any: Allows to in-place copy-construct any from initializer-list and
     EXPECT( any_cast<InitList>( &a )->vec[2]  ==  9  );
     EXPECT( any_cast<InitList>( &a )->c       == 'a' );
     EXPECT( any_cast<InitList>( &a )->s.value.value ==  7               );
+#if any_HAVE_STD_ANY
     EXPECT( any_cast<InitList>( &a )->s.state       == copy_constructed );
+#else
+    EXPECT( any_cast<InitList>( &a )->s.state       == move_constructed );
+#endif
     EXPECT(                           s.state       != moved_from       );
 #else
     EXPECT( !!"any: in-place construction is not available (no C++11)" );
