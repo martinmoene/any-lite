@@ -1,6 +1,6 @@
 # any-lite: A single-file header-only version of a C++17-like any, a type-safe container for single values of any type for C++98, C++11 and later
 
-[![Language](https://img.shields.io/badge/language-C++-blue.svg)](https://isocpp.org/)  [![Standard](https://img.shields.io/badge/c%2B%2B-98-blue.svg)](https://en.wikipedia.org/wiki/C%2B%2B#Standardization) [![Standard](https://img.shields.io/badge/c%2B%2B-11-blue.svg)](https://en.wikipedia.org/wiki/C%2B%2B#Standardization) [![Standard](https://img.shields.io/badge/c%2B%2B-14-blue.svg)](https://en.wikipedia.org/wiki/C%2B%2B#Standardization) [![Standard](https://img.shields.io/badge/c%2B%2B-17-blue.svg)](https://en.wikipedia.org/wiki/C%2B%2B#Standardization) [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![Build Status](https://travis-ci.org/martinmoene/any-lite.svg?branch=master)](https://travis-ci.org/martinmoene/any-lite) [![Build status](https://ci.appveyor.com/api/projects/status/gpmw4gt271itoy2n?svg=true)](https://ci.appveyor.com/project/martinmoene/any-lite) [![Version](https://badge.fury.io/gh/martinmoene%2Fany-lite.svg)](https://github.com/martinmoene/any-lite/releases) [![download](https://img.shields.io/badge/latest%20version%20%20-download-blue.svg)](https://raw.githubusercontent.com/martinmoene/any-lite/master/include/nonstd/any.hpp)
+[![Language](https://img.shields.io/badge/language-C++-blue.svg)](https://isocpp.org/)  [![Standard](https://img.shields.io/badge/c%2B%2B-98/11/14/17-blue.svg)](https://en.wikipedia.org/wiki/C%2B%2B#Standardization) [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![Build Status](https://travis-ci.org/martinmoene/any-lite.svg?branch=master)](https://travis-ci.org/martinmoene/any-lite) [![Build status](https://ci.appveyor.com/api/projects/status/gpmw4gt271itoy2n?svg=true)](https://ci.appveyor.com/project/martinmoene/any-lite) [![Version](https://badge.fury.io/gh/martinmoene%2Fany-lite.svg)](https://github.com/martinmoene/any-lite/releases) [![download](https://img.shields.io/badge/latest%20version%20%20-download-blue.svg)](https://raw.githubusercontent.com/martinmoene/any-lite/master/include/nonstd/any.hpp)  [![Try it online](https://img.shields.io/badge/try%20it-online-blue.svg)](https://wandbox.org/permlink/ykX3hmPH1Y7R0Pzk)
 
 **Contents**  
 - [Example usage](#example-usage)
@@ -49,7 +49,7 @@ prompt> g++ -Wall -I../include/nonstd -o 01-basic 01-basic.cpp && 01-basic
 
 In a nutshell
 -------------
-**any lite** is a single-file header-only library to represent a type-safe container for single values of any type. The library aims to provide a [C++17-like any](http://en.cppreference.com/w/cpp/utility/any) for use with C++98 and later.
+**any lite** is a single-file header-only library to represent a type-safe container for single values of any type. The library aims to provide a [C++17-like any](http://en.cppreference.com/w/cpp/utility/any) for use with C++98 and later. If available, std::any is used.
 
 **Features and properties of any lite** are ease of installation (single header), freedom of dependencies other than the standard library. *any lite* shares the approach to in-place tags with [variant-lite](https://github.com/martinmoene/variant-lite) and with [optional-lite](https://github.com/martinmoene/optional-lite) and these libraries can be used together.
 
@@ -88,8 +88,10 @@ Synopsis
 | Error reporting       | class bad_any_cast               | &nbsp; |
 | In-place construction | struct in_place_tag              | &nbsp; |
 | &nbsp;                | in_place                         | select type or index for in-place construction |
+| &nbsp;                | in_place_type                    | select type for in-place construction |
+| &emsp;(variant)       | in_place_index                   | select index for in-place construction |
 | &nbsp;                | nonstd_lite_in_place_type_t( T)  | macro for alias template in_place_type_t&lt;T>  |
-| &nbsp;                | nonstd_lite_in_place_index_t( T )| macro for alias template in_place_index_t&lt;T> |
+| &emsp;(variant)       | nonstd_lite_in_place_index_t( T )| macro for alias template in_place_index_t&lt;T> |
 
 ### Interface of *any lite*
 
