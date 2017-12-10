@@ -191,6 +191,7 @@ All tests should pass, indicating your platform is supported and you are ready t
 
 Other implementations of any
 ----------------------------
+- Isabella Muerte. [MNMLSTC Core](https://github.com/mnmlstc/core) (C++11).
 - Kevlin Henney. [Boost.Any](http://www.boost.org/doc/libs/1_62_0/doc/html/any.html). Safe, generic container for single values of different value types. 2001.
  
 
