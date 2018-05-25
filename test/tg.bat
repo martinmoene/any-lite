@@ -1,6 +1,41 @@
-@setlocal
-@set std=%1
-@if "%std%"=="" set std=c++11
-g++ -std=%std% -O2 -Wall -Wextra -Wno-unused-parameter -o any-lite.t.exe -I../include/nonstd any-main.t.cpp any.t.cpp && any-lite.t.exe
-@endlocal
+@echo off & setlocal enableextensions enabledelayedexpansion
+::
+:: tg.bat - compile & run tests (GNUC).
+::
 
+:: if no std is given, use c++11
+
+set std=%1
+set args=%2 %3 %4 %5 %6 %7 %8 %9
+if "%1" == "" set std=c++11
+
+call :CompilerVersion version
+echo g++ %version%: %std% %args%
+
+::set stdany=-Dany_CONFIG_SELECT_STD_ANY=1 -Dany_CONFIG_SELECT_NONSTD_ANY=1
+
+set any_config=
+
+rem -flto / -fwhole-program
+set  optflags=-O2
+set warnflags=-Wall -Wextra -Wpedantic -Wno-padded -Wno-missing-noreturn 
+set       gpp=g++
+
+%gpp% -std=%std% %optflags% %warnflags% %stdany% %any_config% -o any-main.t.exe -I../include/nonstd any-main.t.cpp any.t.cpp && any-main.t.exe
+
+endlocal & goto :EOF
+
+:: subroutines:
+
+:CompilerVersion  version
+echo off & setlocal enableextensions
+set tmpprogram=_getcompilerversion.tmp
+set tmpsource=%tmpprogram%.c
+
+echo #include ^<stdio.h^>     > %tmpsource%
+echo int main(){printf("%%d.%%d.%%d\n",__GNUC__,__GNUC_MINOR__,__GNUC_PATCHLEVEL__);} >> %tmpsource%
+
+g++ -o %tmpprogram% %tmpsource% >nul
+for /f %%x in ('%tmpprogram%') do set version=%%x
+del %tmpprogram%.* >nul
+endlocal & set %1=%version%& goto :EOF
