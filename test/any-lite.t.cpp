@@ -19,12 +19,19 @@ lest::tests & specification()
     return tests; 
 }
 
-CASE( "any-lite version" "[.version]" )
+CASE( "any-lite version" "[.any][.version]" )
 {
     any_PRESENT( any_lite_MAJOR );
     any_PRESENT( any_lite_MINOR );
     any_PRESENT( any_lite_PATCH );
     any_PRESENT( any_lite_VERSION );
+}
+
+CASE( "any configuration" "[.any][.config]" )
+{
+//  any_PRESENT( any_HAVE_STD_ANY );
+//  any_PRESENT( span_USES_STD_SPAN );
+    any_PRESENT( any_CPLUSPLUS );
 }
 
 CASE( "__cplusplus" "[.stdc++]" )

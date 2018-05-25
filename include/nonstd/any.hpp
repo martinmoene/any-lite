@@ -23,11 +23,22 @@
 
 // any-lite alignment configuration:
 
-// Compiler detection:
+// C++ language version detection (C++20 is speculative):
+// Note: VC14.0/1900 (VS2015) lacks too much from C++14.
 
-#define any_CPP11_OR_GREATER  ( __cplusplus >= 201103L )
-#define any_CPP14_OR_GREATER  ( __cplusplus >= 201402L )
-#define any_CPP17_OR_GREATER  ( __cplusplus >= 201703L )
+#ifndef   any_CPLUSPLUS
+# ifdef  _MSVC_LANG
+#  define any_CPLUSPLUS  (_MSC_VER == 1900 ? 201103L : _MSVC_LANG )
+# else
+#  define any_CPLUSPLUS  __cplusplus
+# endif
+#endif
+
+#define any_CPP98_OR_GREATER  ( any_CPLUSPLUS >= 199711L )
+#define any_CPP11_OR_GREATER  ( any_CPLUSPLUS >= 201103L )
+#define any_CPP14_OR_GREATER  ( any_CPLUSPLUS >= 201402L )
+#define any_CPP17_OR_GREATER  ( any_CPLUSPLUS >= 201703L )
+#define any_CPP20_OR_GREATER  ( any_CPLUSPLUS >= 202000L )
 
 // use C++17 std::any if available:
 

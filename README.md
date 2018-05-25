@@ -131,7 +131,9 @@ Synopsis
 
 ### Configuration macros
 
-Currently there are no configuration macros.
+### Standard selection macro
+\-D<b>any\_CPLUSPLUS</b>=199711L
+Define this macro to override the auto-detection of the supported C++ standard, if your compiler does not set the `__cpluplus` macro correctly.
 
 
 Reported to work with
