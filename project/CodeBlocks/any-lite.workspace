@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_workspace_file>
-	<Workspace title="Workspace">
+	<Workspace title="Any Lite">
 		<Project filename="any-lite.cbp" />
-		<Project filename="../../../variant-lite/project/CodeBlocks/variant-lite.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>
