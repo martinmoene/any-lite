@@ -11,7 +11,13 @@
 #ifndef NONSTD_ANY_LITE_HPP
 #define NONSTD_ANY_LITE_HPP
 
-#define  any_lite_VERSION "0.1.0"
+#define  any_lite_MAJOR  0
+#define  any_lite_MINOR  1
+#define  any_lite_PATCH  0
+#define  any_lite_VERSION  any_STRINGIFY(any_lite_MAJOR) "." any_STRINGIFY(any_lite_MINOR) "." any_STRINGIFY(any_lite_PATCH)
+
+#define any_STRINGIFY(  x )  any_STRINGIFY_( x )
+#define any_STRINGIFY_( x )  #x
 
 // any-lite configuration:
 
