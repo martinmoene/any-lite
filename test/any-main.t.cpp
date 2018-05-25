@@ -5,7 +5,7 @@
 // Distributed under the Boost Software License, Version 1.0. 
 // (See accompanying file LICENSE.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include "any-lite.t.h"
+#include "any-main.t.hpp"
 
 #define any_PRESENT( x ) \
     std::cout << #x << ": " << x << "\n"
@@ -192,15 +192,15 @@ int main( int argc, char * argv[] )
 }
 
 #if 0
-g++            -I../include/nonstd -o any-lite.t.exe any-lite.t.cpp && any-lite.t.exe --pass
-g++ -std=c++98 -I../include/nonstd -o any-lite.t.exe any-lite.t.cpp && any-lite.t.exe --pass
-g++ -std=c++03 -I../include/nonstd -o any-lite.t.exe any-lite.t.cpp && any-lite.t.exe --pass
-g++ -std=c++0x -I../include/nonstd -o any-lite.t.exe any-lite.t.cpp && any-lite.t.exe --pass
-g++ -std=c++11 -I../include/nonstd -o any-lite.t.exe any-lite.t.cpp && any-lite.t.exe --pass
-g++ -std=c++14 -I../include/nonstd -o any-lite.t.exe any-lite.t.cpp && any-lite.t.exe --pass
-g++ -std=c++17 -I../include/nonstd -o any-lite.t.exe any-lite.t.cpp && any-lite.t.exe --pass
+g++            -I../include/nonstd -o any-lite.t.exe any-main.t.cpp && any-lite.t.exe --pass
+g++ -std=c++98 -I../include/nonstd -o any-lite.t.exe any-main.t.cpp && any-lite.t.exe --pass
+g++ -std=c++03 -I../include/nonstd -o any-lite.t.exe any-main.t.cpp && any-lite.t.exe --pass
+g++ -std=c++0x -I../include/nonstd -o any-lite.t.exe any-main.t.cpp && any-lite.t.exe --pass
+g++ -std=c++11 -I../include/nonstd -o any-lite.t.exe any-main.t.cpp && any-lite.t.exe --pass
+g++ -std=c++14 -I../include/nonstd -o any-lite.t.exe any-main.t.cpp && any-lite.t.exe --pass
+g++ -std=c++17 -I../include/nonstd -o any-lite.t.exe any-main.t.cpp && any-lite.t.exe --pass
 
-cl -EHsc -I../include/nonstd any-lite.t.cpp && any-lite.t.exe --pass
+cl -EHsc -I../include/nonstd any-main.t.cpp && any-lite.t.exe --pass
 #endif
 
 // end of file

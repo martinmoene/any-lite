@@ -11,7 +11,7 @@ project( test )
 
 include_directories( "${PROJECT_SOURCE_DIR}/../include/nonstd" )
 
-set( SOURCES any-lite.t.cpp any.t.cpp )
+set( SOURCES any-main.t.cpp any.t.cpp )
 
 add_executable( any-lite.t ${SOURCES} )
 

@@ -4,6 +4,18 @@
 	<Project>
 		<Option title="Any Lite" />
 		<Option compiler="gcc" />
+		<Option show_notes="1">
+			<notes>
+				<![CDATA[any-lite: A single-file header-only version of a C++17-like any, a type-safe container for single values of any type for C++98, C++11 and later
+
+n3804 - https://wg21.link/n3804
+
+Beman Dawes <bdawes at acm dot org>
+Kevlin Henney <kevlin at curbralan dot com>
+Daniel Krügler <daniel dot kruegler at gmail dot com>
+]]>
+			</notes>
+		</Option>
 		<Build>
 			<Target title="default">
 				<Option output="any-lite" prefix_auto="1" extension_auto="1" />
@@ -16,7 +28,6 @@
 		<Unit filename="../../.travis.yml" />
 		<Unit filename="../../CHANGES.txt" />
 		<Unit filename="../../CMakeLists.txt" />
-		<Unit filename="../../LICENSE" />
 		<Unit filename="../../README.md" />
 		<Unit filename="../../appveyor.yml" />
 		<Unit filename="../../example/01-basic.cpp" />
@@ -26,8 +37,8 @@
 		<Unit filename="../../include/nonstd/any-org.hpp" />
 		<Unit filename="../../include/nonstd/any.hpp" />
 		<Unit filename="../../test/CMakeLists.txt" />
-		<Unit filename="../../test/any-lite.t.cpp" />
-		<Unit filename="../../test/any-lite.t.h" />
+		<Unit filename="../../test/any-main.t.cpp" />
+		<Unit filename="../../test/any-main.t.hpp" />
 		<Unit filename="../../test/any.t.cpp" />
 		<Unit filename="../../test/lest_cpp03.hpp" />
 		<Unit filename="../../test/t.bat" />
