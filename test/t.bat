@@ -3,26 +3,33 @@
 :: t.bat - compile & run tests (MSVC).
 ::
 
+set unit=any
+
+:: if no std is given, use compiler default
+
 set std=%1
 if not "%std%"=="" set std=-std:%std%
-
-set CppCoreCheckInclude=%VCINSTALLDIR%\Auxiliary\VS\include
 
 call :CompilerVersion version
 echo VC%version%: %args%
 
-set any_select=-Dany_CONFIG_SELECT_ANY=any_ANY_DEFAULT
-::set any_select=-Dany_CONFIG_SELECT_ANY=any_ANY_LITE
-::set any_select=-Dany_CONFIG_SELECT_ANY=any_ANY_STD
+set UCAP=%unit%
+call :toupper UCAP
 
-set any_config=
+set unit_select=-D%unit%_CONFIG_SELECT_%UCAP%=%unit%_%UCAP%_DEFAULT
+::set unit_select=-D%unit%_CONFIG_SELECT_%UCAP%=%unit%_%UCAP%_LITE
+::set unit_select=-D%unit%_CONFIG_SELECT_%UCAP%=%unit%_%UCAP%_STD
+
+set unit_config=
 
 set msvc_defines=^
     -DNOMINMAX ^
     -D_CRT_SECURE_NO_WARNINGS ^
     -D_SCL_SECURE_NO_WARNINGS
 
-cl -W3 -EHsc %std% %any_select% %any_config% %msvc_defines% -I../include/nonstd any-main.t.cpp any.t.cpp && any-main.t.exe
+set CppCoreCheckInclude=%VCINSTALLDIR%\Auxiliary\VS\include
+
+cl -W3 -EHsc %std% %unit_select% %unit_config% %msvc_defines% -I../include/nonstd %unit%-main.t.cpp %unit%.t.cpp && %unit%-main.t.exe
 endlocal & goto :EOF
 
 :: subroutines:
@@ -42,3 +49,9 @@ set offset=0
 if %version% LSS 1900 set /a offset=1
 set /a version="version / 10 - 10 * ( 5 + offset )"
 endlocal & set %1=%version%& goto :EOF
+
+:: toupper; makes use of the fact that string 
+:: replacement (via SET) is not case sensitive
+:toupper
+for %%L IN (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z) DO SET %1=!%1:%%L=%%L!
+goto :EOF

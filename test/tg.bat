@@ -3,6 +3,8 @@
 :: tg.bat - compile & run tests (GNUC).
 ::
 
+set unit=any
+
 :: if no std is given, use c++11
 
 set std=%1
@@ -12,18 +14,18 @@ if "%1" == "" set std=c++11
 call :CompilerVersion version
 echo g++ %version%: %std% %args%
 
-set any_select=-Dany_CONFIG_SELECT_ANY=any_ANY_DEFAULT
-::set any_select=-Dany_CONFIG_SELECT_ANY=any_ANY_LITE
-::set any_select=-Dany_CONFIG_SELECT_ANY=any_ANY_STD
+set unit_select=-D%unit%_CONFIG_SELECT_%UCAP%=%unit%_%UCAP%_DEFAULT
+::set unit_select=-D%unit%_CONFIG_SELECT_%UCAP%=%unit%_%UCAP%_LITE
+::set unit_select=-D%unit%_CONFIG_SELECT_%UCAP%=%unit%_%UCAP%_STD
 
-set any_config=
+set unit_config=
 
 rem -flto / -fwhole-program
 set  optflags=-O2
 set warnflags=-Wall -Wextra -Wpedantic -Wno-padded -Wno-missing-noreturn 
 set       gpp=g++
 
-%gpp% -std=%std% %optflags% %warnflags% %any_select% %any_config% -o any-main.t.exe -I../include/nonstd any-main.t.cpp any.t.cpp && any-main.t.exe
+%gpp% -std=%std% %optflags% %warnflags% %unit_select% %unit_config% -o %unit%-main.t.exe -I../include/nonstd %unit%-main.t.cpp %unit%.t.cpp && %unit%-main.t.exe
 
 endlocal & goto :EOF
 
@@ -41,3 +43,9 @@ g++ -o %tmpprogram% %tmpsource% >nul
 for /f %%x in ('%tmpprogram%') do set version=%%x
 del %tmpprogram%.* >nul
 endlocal & set %1=%version%& goto :EOF
+
+:: toupper; makes use of the fact that string 
+:: replacement (via SET) is not case sensitive
+:toupper
+for %%L IN (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z) DO SET %1=!%1:%%L=%%L!
+goto :EOF
