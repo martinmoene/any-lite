@@ -43,13 +43,7 @@
 
 // use C++17 std::any if available and requested:
 
-#if defined(__has_include )
-# define any_HAS_INCLUDE( arg )  __has_include( arg )
-#else
-# define any_HAS_INCLUDE( arg )  0
-#endif
-
-#if any_CPP17_OR_GREATER && any_HAS_INCLUDE( <any> )
+#if any_CPP17_OR_GREATER && defined(__has_include ) && __has_include( <any> )
 # define any_HAVE_STD_ANY  1
 #else
 # define any_HAVE_STD_ANY  0
