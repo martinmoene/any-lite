@@ -4,7 +4,7 @@
 	<Project>
 		<Option title="Any Lite" />
 		<Option compiler="gcc" />
-		<Option show_notes="1">
+		<Option show_notes="0">
 			<notes>
 				<![CDATA[any-lite: A single-file header-only version of a C++17-like any, a type-safe container for single values of any type for C++98, C++11 and later
 

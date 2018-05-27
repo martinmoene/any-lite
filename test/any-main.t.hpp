@@ -17,7 +17,15 @@ using namespace nonstd;
 
 #define CASE( name ) lest_CASE( specification(), name )
 
-extern lest::tests & specification();
+// Attribute externally visible for -fwhole-program:
+
+#if defined __GNUC__
+# define any_ATTRIBUTE_EXT_VIS  __attribute__((externally_visible))
+#else
+# define any_ATTRIBUTE_EXT_VIS
+#endif
+
+extern lest::tests & specification() any_ATTRIBUTE_EXT_VIS;
 
 namespace nonstd {
 

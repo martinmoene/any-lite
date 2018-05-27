@@ -11,10 +11,11 @@
 #ifndef NONSTD_ANY_LITE_HPP
 #define NONSTD_ANY_LITE_HPP
 
-#define  any_lite_MAJOR  0
-#define  any_lite_MINOR  1
-#define  any_lite_PATCH  0
-#define  any_lite_VERSION  any_STRINGIFY(any_lite_MAJOR) "." any_STRINGIFY(any_lite_MINOR) "." any_STRINGIFY(any_lite_PATCH)
+#define any_lite_MAJOR  0
+#define any_lite_MINOR  1
+#define any_lite_PATCH  0
+
+#define any_lite_VERSION  any_STRINGIFY(any_lite_MAJOR) "." any_STRINGIFY(any_lite_MINOR) "." any_STRINGIFY(any_lite_PATCH)
 
 #define any_STRINGIFY(  x )  any_STRINGIFY_( x )
 #define any_STRINGIFY_( x )  #x
@@ -40,17 +41,31 @@
 #define any_CPP17_OR_GREATER  ( any_CPLUSPLUS >= 201703L )
 #define any_CPP20_OR_GREATER  ( any_CPLUSPLUS >= 202000L )
 
-// use C++17 std::any if available:
+// use C++17 std::any if available and requested:
 
-#if defined( __has_include )
+#if defined(__has_include )
 # define any_HAS_INCLUDE( arg )  __has_include( arg )
 #else
 # define any_HAS_INCLUDE( arg )  0
 #endif
 
-#if any_HAS_INCLUDE( <any> ) && any_CPP17_OR_GREATER
+#if any_CPP17_OR_GREATER && any_HAS_INCLUDE( <any> )
+# define any_HAVE_STD_ANY  1
+#else
+# define any_HAVE_STD_ANY  0
+#endif
 
-#define any_HAVE_STD_ANY  1
+#define any_ANY_DEFAULT  0
+#define any_ANY_LITE     1
+#define any_ANY_STD      2
+
+#if !defined( any_CONFIG_SELECT_ANY )
+# define any_CONFIG_SELECT_ANY  ( any_HAVE_STD_ANY ? any_ANY_STD : any_ANY_LITE )
+#endif
+
+// Using std::any:
+
+#if any_CONFIG_SELECT_ANY == any_ANY_STD
 
 #include <any>
 
@@ -66,27 +81,48 @@ namespace nonstd {
     using std::in_place_type;
     using std::in_place_t;
     using std::in_place_type_t;
-};
+}
 
 #else // C++17 std::any
 
 #include <typeinfo>
 #include <utility>
 
-// half-open range [lo..hi):
-#define any_BETWEEN( v, lo, hi ) ( lo <= v && v < hi )
+// Compiler versions:
+//
+// MSVC++ 6.0  _MSC_VER == 1200 (Visual Studio 6.0)
+// MSVC++ 7.0  _MSC_VER == 1300 (Visual Studio .NET 2002)
+// MSVC++ 7.1  _MSC_VER == 1310 (Visual Studio .NET 2003)
+// MSVC++ 8.0  _MSC_VER == 1400 (Visual Studio 2005)
+// MSVC++ 9.0  _MSC_VER == 1500 (Visual Studio 2008)
+// MSVC++ 10.0 _MSC_VER == 1600 (Visual Studio 2010)
+// MSVC++ 11.0 _MSC_VER == 1700 (Visual Studio 2012)
+// MSVC++ 12.0 _MSC_VER == 1800 (Visual Studio 2013)
+// MSVC++ 14.0 _MSC_VER == 1900 (Visual Studio 2015)
+// MSVC++ 14.1 _MSC_VER >= 1910 (Visual Studio 2017)
 
-#if defined(_MSC_VER) && !defined(__clang__)
-# define any_COMPILER_MSVC_VERSION   (_MSC_VER / 100 - 5 - (_MSC_VER < 1900))
+#if defined( _MSC_VER ) && !defined( __clang__ )
+# define any_COMPILER_MSVC_VERSION  (_MSC_VER / 10 - 10 * ( 5 + (_MSC_VER < 1900 ) ) )
 #else
-# define any_COMPILER_MSVC_VERSION   0
+# define any_COMPILER_MSVC_VERSION  0
+#endif
+
+#define any_COMPILER_VERSION( major, minor, patch )  ( 10 * ( 10 * (major) + (minor) ) + (patch) )
+
+#if defined __clang__
+# define any_COMPILER_CLANG_VERSION  any_COMPILER_VERSION(__clang_major__, __clang_minor__, __clang_patchlevel__)
+#else
+# define any_COMPILER_CLANG_VERSION  0
 #endif
 
 #if defined __GNUC__
-# define any_COMPILER_GNUC_VERSION  __GNUC__
+# define any_COMPILER_GNUC_VERSION  any_COMPILER_VERSION(__GNUC__, __GNUC_MINOR__, __GNUC_PATCHLEVEL__)
 #else
-# define any_COMPILER_GNUC_VERSION    0
+# define any_COMPILER_GNUC_VERSION  0
 #endif
+
+// half-open range [lo..hi):
+//#define any_BETWEEN( v, lo, hi ) ( lo <= v && v < hi )
 
 // Presence of C++11 language features:
 

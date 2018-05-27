@@ -12,7 +12,9 @@ if "%1" == "" set std=c++11
 call :CompilerVersion version
 echo g++ %version%: %std% %args%
 
-::set stdany=-Dany_CONFIG_SELECT_STD_ANY=1 -Dany_CONFIG_SELECT_NONSTD_ANY=1
+set any_select=-Dany_CONFIG_SELECT_ANY=any_ANY_DEFAULT
+::set any_select=-Dany_CONFIG_SELECT_ANY=any_ANY_LITE
+::set any_select=-Dany_CONFIG_SELECT_ANY=any_ANY_STD
 
 set any_config=
 
@@ -21,7 +23,7 @@ set  optflags=-O2
 set warnflags=-Wall -Wextra -Wpedantic -Wno-padded -Wno-missing-noreturn 
 set       gpp=g++
 
-%gpp% -std=%std% %optflags% %warnflags% %stdany% %any_config% -o any-main.t.exe -I../include/nonstd any-main.t.cpp any.t.cpp && any-main.t.exe
+%gpp% -std=%std% %optflags% %warnflags% %any_select% %any_config% -o any-main.t.exe -I../include/nonstd any-main.t.cpp any.t.cpp && any-main.t.exe
 
 endlocal & goto :EOF
 

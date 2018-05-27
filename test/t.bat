@@ -11,7 +11,9 @@ set CppCoreCheckInclude=%VCINSTALLDIR%\Auxiliary\VS\include
 call :CompilerVersion version
 echo VC%version%: %args%
 
-::set    stdany=-Dany_CONFIG_SELECT_STD_ANY=1 -Dany_CONFIG_SELECT_NONSTD_ANY=1
+set any_select=-Dany_CONFIG_SELECT_ANY=any_ANY_DEFAULT
+::set any_select=-Dany_CONFIG_SELECT_ANY=any_ANY_LITE
+::set any_select=-Dany_CONFIG_SELECT_ANY=any_ANY_STD
 
 set any_config=
 
@@ -20,7 +22,7 @@ set msvc_defines=^
     -D_CRT_SECURE_NO_WARNINGS ^
     -D_SCL_SECURE_NO_WARNINGS
 
-cl -W3 -EHsc %std% %stdany% %any_config% %msvc_defines% -I../include/nonstd any-main.t.cpp any.t.cpp && any-lite.t.exe
+cl -W3 -EHsc %std% %any_select% %any_config% %msvc_defines% -I../include/nonstd any-main.t.cpp any.t.cpp && any-main.t.exe
 endlocal & goto :EOF
 
 :: subroutines:

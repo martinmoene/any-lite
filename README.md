@@ -135,6 +135,12 @@ Synopsis
 \-D<b>any\_CPLUSPLUS</b>=199711L
 Define this macro to override the auto-detection of the supported C++ standard, if your compiler does not set the `__cpluplus` macro correctly.
 
+### Select `std::any` or `nonstd::any`
+At default, *any lite* uses `std::any` if it is available and lets you use it via namespace `nonstd`. You can however override this default and explicitly request to use `std::any` or any lite's `nonstd::any` as `nonstd::any` via the following macros.
+
+-D<b>any\_CONFIG\_SELECT\_ANY</b>=any_ANY_DEFAULT  
+Define this to `any_ANY_STD` to select `std::any` as `nonstd::any`. Define this to `any_ANY_LITE` to select `nonstd::any` as `nonstd::any`. Default is undefined, which has the same effect as defining to `any_ANY_DEFAULT`.
+
 
 Reported to work with
 ---------------------

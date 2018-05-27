@@ -37,8 +37,11 @@ CASE( "any-lite version" "[.any][.version]" )
 
 CASE( "any configuration" "[.any][.config]" )
 {
-//  any_PRESENT( any_HAVE_STD_ANY );
-//  any_PRESENT( span_USES_STD_SPAN );
+    any_PRESENT( any_HAVE_STD_ANY );
+    any_PRESENT( any_CONFIG_SELECT_ANY );
+    any_PRESENT( any_ANY_DEFAULT );
+    any_PRESENT( any_ANY_LITE );
+    any_PRESENT( any_ANY_STD );
     any_PRESENT( any_CPLUSPLUS );
 }
 
@@ -49,13 +52,19 @@ CASE( "__cplusplus" "[.stdc++]" )
 
 CASE( "compiler version" "[.compiler]" )
 {
-#if any_COMPILER_GNUC_VERSION 
+#ifdef any_COMPILER_CLANG_VERSION
+    any_PRESENT( any_COMPILER_CLANG_VERSION );
+#else
+    any_ABSENT(  any_COMPILER_CLANG_VERSION );
+#endif
+
+#ifdef any_COMPILER_GNUC_VERSION
     any_PRESENT( any_COMPILER_GNUC_VERSION );
 #else
     any_ABSENT(  any_COMPILER_GNUC_VERSION );
 #endif
 
-#if any_COMPILER_MSVC_VERSION 
+#ifdef any_COMPILER_MSVC_VERSION
     any_PRESENT( any_COMPILER_MSVC_VERSION );
 #else
     any_ABSENT(  any_COMPILER_MSVC_VERSION );
