@@ -175,7 +175,7 @@ CASE( "any: Allows to in-place construct from literal value (C++11)" )
 #if any_CPP11_OR_GREATER
     using pair_t = std::pair<char, int>;
 
-#if any_HAVE_STD_ANY // or any-lite
+#if any_USES_STD_ANY // or any-lite
     any a( in_place_type<pair_t>, 'a', 7 );
 #else
     any _( in_place_type<pair_t>, 'a', 7 );
@@ -194,7 +194,7 @@ CASE( "any: Allows to in-place copy-construct from value (C++11)" )
     char c = 'a'; V v( 7 );
     using pair_t = std::pair<char, V>;
 
-#if any_HAVE_STD_ANY // or any-lite
+#if any_USES_STD_ANY // or any-lite
     any a( in_place_type<pair_t>, c, v );
 #else
     any _( in_place_type<pair_t>, c, v );
@@ -203,7 +203,7 @@ CASE( "any: Allows to in-place copy-construct from value (C++11)" )
 
     EXPECT( any_cast<pair_t>( &a )->first        == 'a' );
     EXPECT( any_cast<pair_t>( &a )->second.value ==  7  );
-#if any_HAVE_STD_ANY
+#if any_USES_STD_ANY
     EXPECT( any_cast<pair_t>( &a )->second.state == copy_constructed );
 #else
     EXPECT( any_cast<pair_t>( &a )->second.state == move_constructed );
@@ -220,7 +220,7 @@ CASE( "any: Allows to in-place move-construct from value (C++11)" )
     char c = 'a'; V v( 7 );
     using pair_t = std::pair<char, V>;
 
-#if any_HAVE_STD_ANY // or any-lite
+#if any_USES_STD_ANY // or any-lite
     any a( in_place_type<pair_t>, c, std::move(v) );
 #else
 //  any _( in_place_type<pair_t>, c, std::move(v) );
@@ -239,7 +239,7 @@ CASE( "any: Allows to in-place copy-construct from initializer-list (C++11)" )
 {
 #if any_CPP11_OR_GREATER
     S s( 7 );
-#if any_HAVE_STD_ANY // or any-lite
+#if any_USES_STD_ANY // or any-lite
     any a( in_place_type<InitList>, { 7, 8, 9, }, 'a', s );
 #else
     any _( in_place_type<InitList>, { 7, 8, 9, }, 'a', s );
@@ -251,7 +251,7 @@ CASE( "any: Allows to in-place copy-construct from initializer-list (C++11)" )
     EXPECT( any_cast<InitList>( &a )->vec[2]  ==  9  );
     EXPECT( any_cast<InitList>( &a )->c       == 'a' );
     EXPECT( any_cast<InitList>( &a )->s.value.value ==  7               );
-#if any_HAVE_STD_ANY
+#if any_USES_STD_ANY
     EXPECT( any_cast<InitList>( &a )->s.state       == copy_constructed );
 #else
     EXPECT( any_cast<InitList>( &a )->s.state       == move_constructed );
@@ -266,7 +266,7 @@ CASE( "any: Allows to in-place move-construct from initializer-list (C++11)" )
 {
 #if any_CPP11_OR_GREATER
     S s( 7 );
-#if any_HAVE_STD_ANY // or any-lite
+#if any_USES_STD_ANY // or any-lite
     any a( in_place_type<InitList>, { 7, 8, 9, }, 'a', std::move(s) );
 #else
 //  any _( in_place_type<InitList>, { 7, 8, 9, }, 'a', std::move(s) );
@@ -355,7 +355,7 @@ CASE( "any: Allows to copy-emplace content (C++11)" )
 
     EXPECT( any_cast<pair_t>( &a )->first        == 'a'              );
     EXPECT( any_cast<pair_t>( &a )->second.value ==  7               );
-#if any_HAVE_STD_ANY
+#if any_USES_STD_ANY
     EXPECT( any_cast<pair_t>( &a )->second.state == copy_constructed );
 #else
     EXPECT( any_cast<pair_t>( &a )->second.state == move_constructed );
@@ -397,7 +397,7 @@ CASE( "any: Allows to copy-emplace content from intializer-list (C++11)" )
     EXPECT( any_cast<InitList>( &a )->vec[2]  ==  9  );
     EXPECT( any_cast<InitList>( &a )->c       == 'a' );
     EXPECT( any_cast<InitList>( &a )->s.value.value ==  7               );
-#if any_HAVE_STD_ANY
+#if any_USES_STD_ANY
     EXPECT( any_cast<InitList>( &a )->s.state       == copy_constructed );
 #else
     EXPECT( any_cast<InitList>( &a )->s.state       == move_constructed );
@@ -489,7 +489,7 @@ CASE( "make_any: Allows to in-place copy-construct any from arguments (C++11)" )
 
     EXPECT( any_cast<pair_t>( &a )->first              == 'a' );
     EXPECT( any_cast<pair_t>( &a )->second.value.value ==  7  );
-#if any_HAVE_STD_ANY
+#if any_USES_STD_ANY
     EXPECT( any_cast<pair_t>( &a )->second.state       == copy_constructed );
 #else
     EXPECT( any_cast<pair_t>( &a )->second.state       == move_constructed );
@@ -528,7 +528,7 @@ CASE( "make_any: Allows to in-place copy-construct any from initializer-list and
     EXPECT( any_cast<InitList>( &a )->vec[2]  ==  9  );
     EXPECT( any_cast<InitList>( &a )->c       == 'a' );
     EXPECT( any_cast<InitList>( &a )->s.value.value ==  7               );
-#if any_HAVE_STD_ANY
+#if any_USES_STD_ANY
     EXPECT( any_cast<InitList>( &a )->s.state       == copy_constructed );
 #else
     EXPECT( any_cast<InitList>( &a )->s.state       == move_constructed );

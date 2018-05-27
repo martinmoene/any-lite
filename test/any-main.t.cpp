@@ -38,6 +38,7 @@ CASE( "any-lite version" "[.any][.version]" )
 CASE( "any configuration" "[.any][.config]" )
 {
     any_PRESENT( any_HAVE_STD_ANY );
+    any_PRESENT( any_USES_STD_ANY );
     any_PRESENT( any_CONFIG_SELECT_ANY );
     any_PRESENT( any_ANY_DEFAULT );
     any_PRESENT( any_ANY_LITE );
@@ -50,153 +51,58 @@ CASE( "__cplusplus" "[.stdc++]" )
     any_PRESENT( __cplusplus );
 }
 
-CASE( "compiler version" "[.compiler]" )
+CASE( "Compiler version" "[.compiler]" )
 {
-#ifdef any_COMPILER_CLANG_VERSION
+#if any_USES_STD_ANY
+    std::cout << "(Compiler version not available: using std::any)\n";
+#else
     any_PRESENT( any_COMPILER_CLANG_VERSION );
-#else
-    any_ABSENT(  any_COMPILER_CLANG_VERSION );
-#endif
-
-#ifdef any_COMPILER_GNUC_VERSION
     any_PRESENT( any_COMPILER_GNUC_VERSION );
-#else
-    any_ABSENT(  any_COMPILER_GNUC_VERSION );
-#endif
-
-#ifdef any_COMPILER_MSVC_VERSION
     any_PRESENT( any_COMPILER_MSVC_VERSION );
-#else
-    any_ABSENT(  any_COMPILER_MSVC_VERSION );
 #endif
 }
 
 CASE( "Presence of C++ language features" "[.stdlanguage]" )
 {
-#if any_HAVE_AUTO 
-    any_PRESENT( any_HAVE_AUTO );
-#else    
-    any_ABSENT(  any_HAVE_AUTO );
-#endif
-
-#if any_HAVE_NULLPTR 
+#if any_USES_STD_ANY
+    std::cout << "(Presence of C++ language features not available: using std::any)\n";
+#else
+//  any_PRESENT( any_HAVE_AUTO );
     any_PRESENT( any_HAVE_NULLPTR );
-#else    
-    any_ABSENT(  any_HAVE_NULLPTR );
-#endif
-
-#if any_HAVE_STATIC_ASSERT
     any_PRESENT( any_HAVE_STATIC_ASSERT );
-#else    
-    any_ABSENT(  any_HAVE_STATIC_ASSERT );
-#endif
-
-#if any_HAVE_DEFAULT_FUNCTION_TEMPLATE_ARG 
     any_PRESENT( any_HAVE_DEFAULT_FUNCTION_TEMPLATE_ARG );
-#else    
-    any_ABSENT(  any_HAVE_DEFAULT_FUNCTION_TEMPLATE_ARG );
-#endif
-
-#if any_HAVE_ALIAS_TEMPLATE 
-    any_PRESENT( any_HAVE_ALIAS_TEMPLATE );
-#else    
-    any_ABSENT(  any_HAVE_ALIAS_TEMPLATE );
-#endif
-
-#if any_HAVE_CONSTEXPR_11 
+//  any_PRESENT( any_HAVE_ALIAS_TEMPLATE );
     any_PRESENT( any_HAVE_CONSTEXPR_11 );
-#else    
-    any_ABSENT(  any_HAVE_CONSTEXPR_11 );
-#endif
-
-#if any_HAVE_CONSTEXPR_14
     any_PRESENT( any_HAVE_CONSTEXPR_14 );
-#else    
-    any_ABSENT(  any_HAVE_CONSTEXPR_14 );
-#endif
-
-#if any_HAVE_ENUM_CLASS 
-    any_PRESENT( any_HAVE_ENUM_CLASS );
-#else    
-    any_ABSENT(  any_HAVE_ENUM_CLASS );
-#endif
-
-#if any_HAVE_ENUM_CLASS_CONSTRUCTION_FROM_UNDERLYING_TYPE 
-    any_PRESENT( any_HAVE_ENUM_CLASS_CONSTRUCTION_FROM_UNDERLYING_TYPE );
-#else    
-    any_ABSENT(  any_HAVE_ENUM_CLASS_CONSTRUCTION_FROM_UNDERLYING_TYPE );
-#endif
-
-#if any_HAVE_EXPLICIT_CONVERSION 
-    any_PRESENT( any_HAVE_EXPLICIT_CONVERSION );
-#else    
-    any_ABSENT(  any_HAVE_EXPLICIT_CONVERSION );
-#endif
-
-#if any_HAVE_INITIALIZER_LIST 
+//  any_PRESENT( any_HAVE_ENUM_CLASS );
+//  any_PRESENT( any_HAVE_ENUM_CLASS_CONSTRUCTION_FROM_UNDERLYING_TYPE );
+//  any_PRESENT( any_HAVE_EXPLICIT_CONVERSION );
     any_PRESENT( any_HAVE_INITIALIZER_LIST );
-#else    
-    any_ABSENT(  any_HAVE_INITIALIZER_LIST );
-#endif
-
-#if any_HAVE_IS_DEFAULT 
-    any_PRESENT( any_HAVE_IS_DEFAULT );
-#else    
-    any_ABSENT(  any_HAVE_IS_DEFAULT );
-#endif
-
-#if any_HAVE_IS_DELETE 
-    any_PRESENT( any_HAVE_IS_DELETE );
-#else    
-    any_ABSENT(  any_HAVE_IS_DELETE );
-#endif
-
-#if any_HAVE_NOEXCEPT 
+//  any_PRESENT( any_HAVE_IS_DEFAULT );
+//  any_PRESENT( any_HAVE_IS_DELETE );
     any_PRESENT( any_HAVE_NOEXCEPT );
-#else    
-    any_ABSENT(  any_HAVE_NOEXCEPT );
 #endif
 }
 
 CASE( "Presence of C++ library features" "[.stdlibrary]" )
 {
-#if any_HAVE_ARRAY
-    any_PRESENT( any_HAVE_ARRAY );
-#else    
-    any_ABSENT(  any_HAVE_ARRAY );
-#endif
-
-#if any_HAVE_CONDITIONAL
-    any_PRESENT( any_HAVE_CONDITIONAL );
-#else    
-    any_ABSENT(  any_HAVE_CONDITIONAL );
-#endif
-
-#if any_HAVE_CONTAINER_DATA_METHOD
-    any_PRESENT( any_HAVE_CONTAINER_DATA_METHOD );
-#else    
-    any_ABSENT(  any_HAVE_CONTAINER_DATA_METHOD );
-#endif
-
-#if any_HAVE_REMOVE_CV
-    any_PRESENT( any_HAVE_REMOVE_CV );
-#else    
-    any_ABSENT(  any_HAVE_REMOVE_CV );
-#endif
-
-#if any_HAVE_SIZED_TYPES
-    any_PRESENT( any_HAVE_SIZED_TYPES );
-#else    
-    any_ABSENT(  any_HAVE_SIZED_TYPES );
-#endif
-
-#if any_HAVE_TYPE_TRAITS
+#if any_USES_STD_ANY
+    std::cout << "(Presence of C++ library features not available: using std::any)\n";
+#else
+//  any_PRESENT( any_HAVE_ARRAY );
+    any_PRESENT( any_HAVE_ADD_CONST );
+    any_PRESENT( any_HAVE_TR1_ADD_CONST );
+//  any_PRESENT( any_HAVE_CONDITIONAL );
+//  any_PRESENT( any_HAVE_CONTAINER_DATA_METHOD );
+//  any_PRESENT( any_HAVE_REMOVE_CV );
+    any_PRESENT( any_HAVE_REMOVE_REFERENCE );
+    any_PRESENT( any_HAVE_TR1_REMOVE_REFERENCE );
+//  any_PRESENT( any_HAVE_SIZED_TYPES );
     any_PRESENT( any_HAVE_TYPE_TRAITS );
-#else    
-    any_ABSENT(  any_HAVE_TYPE_TRAITS );
+    any_PRESENT( any_HAVE_TR1_TYPE_TRAITS );
 #endif
 
-#if _HAS_CPP0X
+#if defined _HAS_CPP0X
     any_PRESENT( _HAS_CPP0X );
 #else    
     any_ABSENT(  _HAS_CPP0X );

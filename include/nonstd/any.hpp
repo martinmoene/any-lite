@@ -63,9 +63,11 @@
 # define any_CONFIG_SELECT_ANY  ( any_HAVE_STD_ANY ? any_ANY_STD : any_ANY_LITE )
 #endif
 
+#define any_USES_STD_ANY  ( (any_CONFIG_SELECT_ANY == any_ANY_STD) || ((any_CONFIG_SELECT_ANY == any_ANY_DEFAULT) && any_HAVE_STD_ANY) )
+
 // Using std::any:
 
-#if any_CONFIG_SELECT_ANY == any_ANY_STD
+#if any_USES_STD_ANY
 
 #include <any>
 
@@ -124,52 +126,50 @@ namespace nonstd {
 // half-open range [lo..hi):
 //#define any_BETWEEN( v, lo, hi ) ( lo <= v && v < hi )
 
+// Presence of language and library features:
+
+#define any_HAVE( feature )  ( any_HAVE_##feature )
+
+#ifdef _HAS_CPP0X
+# define any_HAS_CPP0X  _HAS_CPP0X
+#else
+# define any_HAS_CPP0X  0
+#endif
+
+#define any_CPP11_90   (any_CPP11_OR_GREATER || any_COMPILER_MSVC_VERSION >= 90)
+#define any_CPP11_100  (any_CPP11_OR_GREATER || any_COMPILER_MSVC_VERSION >= 100)
+#define any_CPP11_120  (any_CPP11_OR_GREATER || any_COMPILER_MSVC_VERSION >= 120)
+#define any_CPP11_140  (any_CPP11_OR_GREATER || any_COMPILER_MSVC_VERSION >= 140)
+
+#define any_CPP14_000  (any_CPP14_OR_GREATER)
+#define any_CPP17_000  (any_CPP17_OR_GREATER)
+
 // Presence of C++11 language features:
 
-#if any_CPP11_OR_GREATER || any_COMPILER_MSVC_VERSION >= 100
-# define any_HAVE_NULLPTR  1
-#endif
+#define any_HAVE_CONSTEXPR_11           any_CPP11_140
+#define any_HAVE_DEFAULT_FUNCTION_TEMPLATE_ARG \
+                                        any_CPP11_120
+#define any_HAVE_INITIALIZER_LIST       any_CPP11_120
+#define any_HAVE_NOEXCEPT               any_CPP11_140
+#define any_HAVE_NULLPTR                any_CPP11_100
+#define any_HAVE_TYPE_TRAITS            any_CPP11_90
+#define any_HAVE_STATIC_ASSERT          any_CPP11_100
+#define any_HAVE_ADD_CONST              any_CPP11_90
+#define any_HAVE_REMOVE_REFERENCE       any_CPP11_90
 
-#if any_CPP11_OR_GREATER || any_COMPILER_MSVC_VERSION >= 120
-# define any_HAVE_DEFAULT_FUNCTION_TEMPLATE_ARG  1
-# define any_HAVE_INITIALIZER_LIST  1
-#endif
-
-#if any_CPP11_OR_GREATER || any_COMPILER_MSVC_VERSION >= 140
-# define any_HAVE_CONSTEXPR_11  1
-# define any_HAVE_NOEXCEPT  1
-#endif
+#define any_HAVE_TR1_ADD_CONST          (!! any_COMPILER_GNUC_VERSION )
+#define any_HAVE_TR1_REMOVE_REFERENCE   (!! any_COMPILER_GNUC_VERSION )
+#define any_HAVE_TR1_TYPE_TRAITS        (!! any_COMPILER_GNUC_VERSION )
 
 // Presence of C++14 language features:
 
-#if any_CPP14_OR_GREATER
-# define any_HAVE_CONSTEXPR_14  1
-#endif
+#define any_HAVE_CONSTEXPR_14           any_CPP14_000
 
 // Presence of C++17 language features:
 
+#define any_HAVE_NODISCARD              any_CPP17_000
+
 // Presence of C++ library features:
-
-#if any_COMPILER_GNUC_VERSION
-# define any_HAVE_TR1_TYPE_TRAITS  1
-# define any_HAVE_TR1_ADD_CONST  1
-# define any_HAVE_TR1_REMOVE_REFERENCE  1
-#endif
-
-#if any_CPP11_OR_GREATER || any_COMPILER_MSVC_VERSION >= 90
-# define any_HAVE_TYPE_TRAITS  1
-# define any_HAVE_STD_ADD_CONST  1
-# define any_HAVE_STD_REMOVE_REFERENCE  1
-#endif
-
-// For the rest, consider VC14 as C++11 for any-lite:
-
-#if any_COMPILER_MSVC_VERSION >= 140
-# undef  any_CPP11_OR_GREATER
-# define any_CPP11_OR_GREATER  1
-#endif
-
-// C++ feature usage:
 
 #if any_HAVE_CONSTEXPR_11
 # define any_constexpr constexpr
@@ -195,6 +195,12 @@ namespace nonstd {
 # define any_nullptr NULL
 #endif
 
+#if any_HAVE_NODISCARD
+# define any_nodiscard [[nodiscard]]
+#else
+# define any_nodiscard /*[[nodiscard]]*/
+#endif
+
 // additional includes:
 
 #if ! any_HAVE_NULLPTR
@@ -215,7 +221,7 @@ namespace nonstd {
 // in_place: code duplicated in any-lite, optional-lite, variant-lite:
 //
 
-#if ! nonstd_lite_HAVE_IN_PLACE_TYPES
+#if ! defined nonstd_lite_HAVE_IN_PLACE_TYPES
 
 namespace nonstd {
 
@@ -276,7 +282,7 @@ namespace detail {
 
 // C++11 emulation:
 
-#if any_HAVE_STD_ADD_CONST
+#if any_HAVE_ADD_CONST
 
 using std::add_const;
 
@@ -290,7 +296,7 @@ template< class T > struct add_const { typedef const T type; };
 
 #endif // any_HAVE_ADD_CONST
 
-#if any_HAVE_STD_REMOVE_REFERENCE
+#if any_HAVE_REMOVE_REFERENCE
 
 using std::remove_reference;
 
@@ -303,7 +309,7 @@ using std::tr1::remove_reference;
 template< class T > struct remove_reference     { typedef T type; };
 template< class T > struct remove_reference<T&> { typedef T type; };
 
-#endif // any_HAVE_STD_REMOVE_REFERENCE
+#endif // any_HAVE_REMOVE_REFERENCE
 
 } // namespace detail
 
