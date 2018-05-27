@@ -22,7 +22,13 @@
 
 // any-lite configuration:
 
-// any-lite alignment configuration:
+#define any_ANY_DEFAULT  0
+#define any_ANY_LITE     1
+#define any_ANY_STD      2
+
+#if !defined( any_CONFIG_SELECT_ANY )
+# define any_CONFIG_SELECT_ANY  ( any_HAVE_STD_ANY ? any_ANY_STD : any_ANY_LITE )
+#endif
 
 // C++ language version detection (C++20 is speculative):
 // Note: VC14.0/1900 (VS2015) lacks too much from C++14.
@@ -47,14 +53,6 @@
 # define any_HAVE_STD_ANY  1
 #else
 # define any_HAVE_STD_ANY  0
-#endif
-
-#define any_ANY_DEFAULT  0
-#define any_ANY_LITE     1
-#define any_ANY_STD      2
-
-#if !defined( any_CONFIG_SELECT_ANY )
-# define any_CONFIG_SELECT_ANY  ( any_HAVE_STD_ANY ? any_ANY_STD : any_ANY_LITE )
 #endif
 
 #define any_USES_STD_ANY  ( (any_CONFIG_SELECT_ANY == any_ANY_STD) || ((any_CONFIG_SELECT_ANY == any_ANY_DEFAULT) && any_HAVE_STD_ANY) )
