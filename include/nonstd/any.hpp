@@ -126,16 +126,16 @@ namespace nonstd {
 
 // Presence of C++11 language features:
 
-#if any_CPP11_OR_GREATER || any_COMPILER_MSVC_VERSION >= 10
+#if any_CPP11_OR_GREATER || any_COMPILER_MSVC_VERSION >= 100
 # define any_HAVE_NULLPTR  1
 #endif
 
-#if any_CPP11_OR_GREATER || any_COMPILER_MSVC_VERSION >= 12
+#if any_CPP11_OR_GREATER || any_COMPILER_MSVC_VERSION >= 120
 # define any_HAVE_DEFAULT_FUNCTION_TEMPLATE_ARG  1
 # define any_HAVE_INITIALIZER_LIST  1
 #endif
 
-#if any_CPP11_OR_GREATER || any_COMPILER_MSVC_VERSION >= 14
+#if any_CPP11_OR_GREATER || any_COMPILER_MSVC_VERSION >= 140
 # define any_HAVE_CONSTEXPR_11  1
 # define any_HAVE_NOEXCEPT  1
 #endif
@@ -156,7 +156,7 @@ namespace nonstd {
 # define any_HAVE_TR1_REMOVE_REFERENCE  1
 #endif
 
-#if any_CPP11_OR_GREATER || any_COMPILER_MSVC_VERSION >= 9
+#if any_CPP11_OR_GREATER || any_COMPILER_MSVC_VERSION >= 90
 # define any_HAVE_TYPE_TRAITS  1
 # define any_HAVE_STD_ADD_CONST  1
 # define any_HAVE_STD_REMOVE_REFERENCE  1
@@ -164,7 +164,7 @@ namespace nonstd {
 
 // For the rest, consider VC14 as C++11 for any-lite:
 
-#if any_COMPILER_MSVC_VERSION >= 14
+#if any_COMPILER_MSVC_VERSION >= 140
 # undef  any_CPP11_OR_GREATER
 # define any_CPP11_OR_GREATER  1
 #endif
