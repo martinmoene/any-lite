@@ -523,7 +523,7 @@ template< class ValueType, typename = typename std::enable_if< std::is_reference
 #else
 template< class ValueType >
 #endif
-inline ValueType any_cast( any const & operand )
+any_nodiscard inline ValueType any_cast( any const & operand )
 {
    const ValueType * result = any_cast< typename detail::add_const< typename detail::remove_reference<ValueType>::type >::type >( &operand );
 
@@ -540,7 +540,7 @@ template< class ValueType, typename = typename std::enable_if< std::is_reference
 #else
 template< class ValueType >
 #endif
-inline ValueType any_cast( any & operand )
+any_nodiscard inline ValueType any_cast( any & operand )
 {
    const ValueType * result = any_cast< typename detail::remove_reference<ValueType>::type >( &operand );
 
@@ -559,7 +559,7 @@ template< class ValueType, typename = typename std::enable_if< std::is_reference
 #else
 template< class ValueType >
 #endif
-inline ValueType any_cast( any && operand )
+any_nodiscard inline ValueType any_cast( any && operand )
 {
    const ValueType * result = any_cast< typename detail::remove_reference<ValueType>::type >( &operand );
 
@@ -574,13 +574,13 @@ inline ValueType any_cast( any && operand )
 #endif // any_CPP11_OR_GREATER
 
 template< class ValueType >
-inline ValueType const * any_cast( any const * operand ) any_noexcept
+any_nodiscard inline ValueType const * any_cast( any const * operand ) any_noexcept
 {
     return operand != any_nullptr && operand->type() == typeid(ValueType) ? operand->to_ptr<ValueType>() : any_nullptr;
 }
 
 template<class ValueType >
-inline ValueType * any_cast( any * operand ) any_noexcept
+any_nodiscard inline ValueType * any_cast( any * operand ) any_noexcept
 {
     return operand != any_nullptr && operand->type() == typeid(ValueType) ? operand->to_ptr<ValueType>() : any_nullptr;
 }
