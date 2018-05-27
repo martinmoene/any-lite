@@ -19,7 +19,7 @@ using namespace nonstd;
 
 // Attribute externally visible for -fwhole-program:
 
-#if defined __GNUC__
+#if defined __GNUC__ && ! defined __clang__
 # define any_ATTRIBUTE_EXT_VIS  __attribute__((externally_visible))
 #else
 # define any_ATTRIBUTE_EXT_VIS
