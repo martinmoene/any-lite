@@ -1,8 +1,9 @@
-// Copyright (c) 2016 Martin Moene
+//
+// Copyright (c) 2016-2018 Martin Moene
 //
 // https://github.com/martinmoene/any-lite
 //
-// Distributed under the Boost Software License, Version 1.0. 
+// Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include "any-main.t.hpp"
@@ -21,10 +22,10 @@
 # pragma GCC   diagnostic ignored "-Wunused-parameter"
 #endif
 
-lest::tests & specification() 
-{ 
-    static lest::tests tests; 
-    return tests; 
+lest::tests & specification()
+{
+    static lest::tests tests;
+    return tests;
 }
 
 CASE( "any-lite version" "[.any][.version]" )
@@ -104,7 +105,7 @@ CASE( "Presence of C++ library features" "[.stdlibrary]" )
 
 #if defined _HAS_CPP0X
     any_PRESENT( _HAS_CPP0X );
-#else    
+#else
     any_ABSENT(  _HAS_CPP0X );
 #endif
 }

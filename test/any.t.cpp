@@ -1,9 +1,9 @@
 //
-// Copyright (c) 2016 Martin Moene
+// Copyright (c) 2016-2018 Martin Moene
 //
 // https://github.com/martinmoene/any-lite
 //
-// Distributed under the Boost Software License, Version 1.0. 
+// Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include "any-main.t.hpp"
@@ -225,7 +225,7 @@ CASE( "any: Allows to in-place move-construct from value (C++11)" )
 #else
 //  any _( in_place_type<pair_t>, c, std::move(v) );
     any a( in_place<     pair_t>, c, std::move(v) );
-#endif    
+#endif
     EXPECT( any_cast<pair_t>( &a )->first        == 'a' );
     EXPECT( any_cast<pair_t>( &a )->second.value ==  7  );
     EXPECT( any_cast<pair_t>( &a )->second.state == move_constructed );
@@ -244,7 +244,7 @@ CASE( "any: Allows to in-place copy-construct from initializer-list (C++11)" )
 #else
     any _( in_place_type<InitList>, { 7, 8, 9, }, 'a', s );
     any a( in_place<     InitList>, { 7, 8, 9, }, 'a', s );
-#endif    
+#endif
 
     EXPECT( any_cast<InitList>( &a )->vec[0]  ==  7  );
     EXPECT( any_cast<InitList>( &a )->vec[1]  ==  8  );
@@ -271,7 +271,7 @@ CASE( "any: Allows to in-place move-construct from initializer-list (C++11)" )
 #else
 //  any _( in_place_type<InitList>, { 7, 8, 9, }, 'a', std::move(s) );
     any a( in_place<     InitList>, { 7, 8, 9, }, 'a', std::move(s) );
-#endif    
+#endif
 
     EXPECT( any_cast<InitList>( &a )->vec[0]  ==  7  );
     EXPECT( any_cast<InitList>( &a )->vec[1]  ==  8  );
@@ -505,7 +505,7 @@ CASE( "make_any: Allows to in-place move-construct any from arguments (C++11)" )
 #if any_CPP11_OR_GREATER
     using pair_t = std::pair<char, S>;
     S s( 7 );
-    
+
     any a = make_any<pair_t>( 'a', std::move( s ) );
 
     EXPECT( any_cast<pair_t>( &a )->first              == 'a' );
