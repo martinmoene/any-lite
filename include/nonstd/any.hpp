@@ -345,17 +345,26 @@ public:
         rhs.content = any_nullptr;
     }
 
-    template< class ValueType, class T = typename std::decay<ValueType>::type, typename = typename std::enable_if< ! std::is_same<T, any>::value >::type >
+    template< 
+        class ValueType, class T = typename std::decay<ValueType>::type
+        , typename = typename std::enable_if< ! std::is_same<T, any>::value >::type 
+    >
     any( ValueType && value ) any_noexcept
     : content( new holder<T>( std::move( value ) ) )
     {}
 
-    template< class T, class... Args, typename = typename std::enable_if< std::is_constructible<T, Args...>::value >::type >
+    template< 
+        class T, class... Args
+        , typename = typename std::enable_if< std::is_constructible<T, Args...>::value >::type 
+    >
     explicit any( nonstd_lite_in_place_type_t(T), Args&&... args )
     : content( new holder<T>( T( std::forward<Args>(args)... ) ) )
     {}
 
-    template< class T, class U, class... Args, typename = typename std::enable_if< std::is_constructible<T, std::initializer_list<U>&, Args...>::value >::type >
+    template< 
+        class T, class U, class... Args
+        , typename = typename std::enable_if< std::is_constructible<T, std::initializer_list<U>&, Args...>::value >::type 
+    >
     explicit any( nonstd_lite_in_place_type_t(T), std::initializer_list<U> il, Args&&... args )
     : content( new holder<T>( T( il, std::forward<Args>(args)... ) ) )
     {}
@@ -388,7 +397,10 @@ public:
         return *this;
     }
 
-    template< class ValueType, class T = typename std::decay<ValueType>::type, typename = typename std::enable_if< ! std::is_same<T, any>::value >::type >
+    template< 
+        class ValueType, class T = typename std::decay<ValueType>::type
+        , typename = typename std::enable_if< ! std::is_same<T, any>::value >::type 
+    >
     any & operator=( ValueType && rhs )
     {
         any( std::move( rhs ) ).swap( *this );
@@ -401,7 +413,10 @@ public:
         any( T( std::forward<Args>(args)... ) ).swap( *this );
     }
 
-    template< class T, class U, class... Args, typename = typename std::enable_if< std::is_constructible<T, std::initializer_list<U>&, Args...>::value >::type >
+    template< 
+        class T, class U, class... Args
+        , typename = typename std::enable_if< std::is_constructible<T, std::initializer_list<U>&, Args...>::value >::type 
+    >
     void emplace( std::initializer_list<U> il, Args&&... args )
     {
         any( T( il, std::forward<Args>(args)... ) ).swap( *this );
@@ -518,11 +533,12 @@ inline any make_any( std::initializer_list<U> il, Args&& ...args )
 
 #endif // any_CPP11_OR_GREATER
 
+template< 
+    class ValueType
 #if any_HAVE_DEFAULT_FUNCTION_TEMPLATE_ARG
-template< class ValueType, typename = typename std::enable_if< std::is_reference<ValueType>::value || std::is_copy_constructible<ValueType>::value >::type >
-#else
-template< class ValueType >
+    , typename = typename std::enable_if< std::is_reference<ValueType>::value || std::is_copy_constructible<ValueType>::value >::type 
 #endif
+>
 any_nodiscard inline ValueType any_cast( any const & operand )
 {
    const ValueType * result = any_cast< typename detail::add_const< typename detail::remove_reference<ValueType>::type >::type >( &operand );
@@ -535,11 +551,12 @@ any_nodiscard inline ValueType any_cast( any const & operand )
    return *result;
 }
 
+template< 
+    class ValueType
 #if any_HAVE_DEFAULT_FUNCTION_TEMPLATE_ARG
-template< class ValueType, typename = typename std::enable_if< std::is_reference<ValueType>::value || std::is_copy_constructible<ValueType>::value >::type >
-#else
-template< class ValueType >
+    , typename = typename std::enable_if< std::is_reference<ValueType>::value || std::is_copy_constructible<ValueType>::value >::type 
 #endif
+>
 any_nodiscard inline ValueType any_cast( any & operand )
 {
    const ValueType * result = any_cast< typename detail::remove_reference<ValueType>::type >( &operand );
@@ -554,11 +571,12 @@ any_nodiscard inline ValueType any_cast( any & operand )
 
 #if any_CPP11_OR_GREATER
 
+template< 
+    class ValueType
 #if any_HAVE_DEFAULT_FUNCTION_TEMPLATE_ARG
-template< class ValueType, typename = typename std::enable_if< std::is_reference<ValueType>::value || std::is_copy_constructible<ValueType>::value >::type >
-#else
-template< class ValueType >
+    , typename = typename std::enable_if< std::is_reference<ValueType>::value || std::is_copy_constructible<ValueType>::value >::type 
 #endif
+>
 any_nodiscard inline ValueType any_cast( any && operand )
 {
    const ValueType * result = any_cast< typename detail::remove_reference<ValueType>::type >( &operand );
