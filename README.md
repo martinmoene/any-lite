@@ -80,54 +80,54 @@ Synopsis
 - [Algorithms for *any lite*](#algorithms-for-any-lite)  
 - [Configuration macros](#configuration-macros)
 
-### Types in namespace nonstd
+### Types and values in namespace nonstd
 
-| Purpose               | Type | Notes |
-|-----------------------|------|-------|
-| Type-safe container   | class any                        | &nbsp; |
-| Error reporting       | class bad_any_cast               | &nbsp; |
-| In-place construction | struct in_place_tag              | &nbsp; |
-| &nbsp;                | in_place                         | select type or index for in-place construction |
-| &nbsp;                | in_place_type                    | select type for in-place construction |
-| &emsp;(variant)       | in_place_index                   | select index for in-place construction |
-| &nbsp;                | nonstd_lite_in_place_type_t( T)  | macro for alias template in_place_type_t&lt;T>  |
-| &emsp;(variant)       | nonstd_lite_in_place_index_t( T )| macro for alias template in_place_index_t&lt;T> |
+| Purpose               | Type / value | Notes |
+|-----------------------|--------------|-------|
+| Type-safe container   | class **any**                        | &nbsp; |
+| Error reporting       | class **bad_any_cast**               | &nbsp; |
+| In-place construction | struct **in_place_tag**              | &nbsp; |
+| &nbsp;                | **in_place**                         | select type or index for in-place construction |
+| &nbsp;                | **in_place_type**                    | select type for in-place construction |
+| &emsp;(variant)       | **in_place_index**                   | select index for in-place construction |
+| &nbsp;                | **nonstd_lite_in_place_type_t**( T)  | macro for alias template in_place_type_t&lt;T>  |
+| &emsp;(variant)       | **nonstd_lite_in_place_index_t**( T )| macro for alias template in_place_index_t&lt;T> |
 
 ### Interface of *any lite*
 
 | Kind         | Std  | Method                                       | Result |
 |--------------|------|----------------------------------------------|--------|
-| Construction |&nbsp;| any()                                        | default-construct             |
-| &nbsp;       |&nbsp;| any( any const & rhs )                       | copy-construct from other any |
-| &nbsp;       | C++11| any( any && rhs ) noexcept                   | move-construct from other any |
-| &nbsp;       | C++11| template< class ValueType ><br>any( ValueType && value ) noexcept | move-assign from value |
-| &nbsp;       | C++11| template< class T ><br>explicit any( in_place_type_t&lt;T>, Args&&... args ) | in-place-construct type T |
-| &nbsp;       | C++11| template< class T, class U, class... Args ><br>explicit any( in_place_type_t&lt;T>, std::initializer_list&lt;U> il, Args&&... args ) | in-place-construct type T |
-| &nbsp;       |<C++11| template< class ValueType ><br>any( ValueType const & value ) | copy-assign from value |
-| &nbsp;       |&nbsp;| ~any() | destroy current object |
-| Assigment    |&nbsp;| any & operator=( any const & rhs ) | copy-assign from other |
-| &nbsp;       | C++11| any & operator=( any && rhs ) noexcept | move-assign from other |
-| &nbsp;       | C++11| template< class ValueType, ...><br>any & operator=( ValueType && rhs ) | (move-)assign from value |
-| &nbsp;       |<C++11| template< class ValueType ><br>any & operator=( ValueType const & rhs ) | copy-assign from value |
-| Modifiers    | C++11| template< class T, class... Args ><br>void emplace( Args && ... args ) | emplace type T |
-| &nbsp;       | C++11| template< class T, class U, class... Args ><br>void emplace( std::initializer_list&lt;U> il, Args&&... args ) | emplace type T |
-| &nbsp;       |&nbsp;| void reset() noexcept | destroy contained object |
-| &nbsp;       |&nbsp;| void swap( any & rhs ) noexcept | exchange with other any |
-| Observers    |&nbsp;| bool has_value() const noexcept | contains an object |
-| &nbsp;       |&nbsp;| const std::type_info & type() const noexcept | Type of contained object |
+| Construction |&nbsp;| **any**()                                        | default-construct             |
+| &nbsp;       |&nbsp;| **any**( any const & rhs )                       | copy-construct from other any |
+| &nbsp;       | C++11| **any**( any && rhs ) noexcept                   | move-construct from other any |
+| &nbsp;       | C++11| template< class ValueType ><br>**any**( ValueType && value ) noexcept | move-assign from value |
+| &nbsp;       | C++11| template< class T ><br>explicit **any**( in_place_type_t&lt;T>, Args&&... args ) | in-place-construct type T |
+| &nbsp;       | C++11| template< class T, class U, class... Args ><br>explicit **any**( in_place_type_t&lt;T>, std::initializer_list&lt;U> il, Args&&... args ) | in-place-construct type T |
+| &nbsp;       |<C++11| template< class ValueType ><br>**any**( ValueType const & value ) | copy-assign from value |
+| &nbsp;       |&nbsp;| ~**any**() | destroy current object |
+| Assigment    |&nbsp;| any & **operator=**( any const & rhs ) | copy-assign from other |
+| &nbsp;       | C++11| any & **operator=**( any && rhs ) noexcept | move-assign from other |
+| &nbsp;       | C++11| template< class ValueType, ...><br>any & **operator=**( ValueType && rhs ) | (move-)assign from value |
+| &nbsp;       |<C++11| template< class ValueType ><br>any & **operator=**( ValueType const & rhs ) | copy-assign from value |
+| Modifiers    | C++11| template< class T, class... Args ><br>void **emplace**( Args && ... args ) | emplace type T |
+| &nbsp;       | C++11| template< class T, class U, class... Args ><br>void **emplace**( std::initializer_list&lt;U> il, Args&&... args ) | emplace type T |
+| &nbsp;       |&nbsp;| void **reset**() noexcept | destroy contained object |
+| &nbsp;       |&nbsp;| void **swap**( any & rhs ) noexcept | exchange with other any |
+| Observers    |&nbsp;| bool **has_value**() const noexcept | contains an object |
+| &nbsp;       |&nbsp;| const std::type_info & **type**() const noexcept | Type of contained object |
 
 ### Algorithms for *any lite*
 
 | Kind                      | Std  | Function | Result |
 |---------------------------|------|----------|--------|
-| Create                    |C++11 | template< class T, class ...Args ><br>any make_any( Args&& ...args ) | in-place construct |
-| &nbsp;                    |C++11 | template< class T, class U, class ...Args ><br>any make_any( std::initializer_list&lt;U> il, Args&& ...args ) | in-place construct |
-| Access                    |&nbsp;| T any_cast<T>( any const & )  | obtained value |
-| &nbsp;                    |&nbsp;| T any_cast<T>( any & )        | obtained value |
-| &nbsp;                    |C++11 | T any_cast<T>( any && )       | obtained value |
-| &nbsp;                    |&nbsp;| T const \* any_cast<T>( any const * )  | pointer to obtained value |
-| &nbsp;                    |&nbsp;| T \* any_cast<T>( any * )     | pointer to obtained value |
-| Swap                      |&nbsp;| void swap( any & x, any & y ) | exchange contents |
+| Create                    |C++11 | template< class T, class ...Args ><br>any **make_any**( Args&& ...args ) | in-place construct |
+| &nbsp;                    |C++11 | template< class T, class U, class ...Args ><br>any **make_any**( std::initializer_list&lt;U> il, Args&& ...args ) | in-place construct |
+| Access                    |&nbsp;| T **any_cast<T>**( any const & )  | obtained value |
+| &nbsp;                    |&nbsp;| T **any_cast<T>**( any & )        | obtained value |
+| &nbsp;                    |C++11 | T **any_cast<T>**( any && )       | obtained value |
+| &nbsp;                    |&nbsp;| T const \* **any_cast<T>**( any const * )  | pointer to obtained value |
+| &nbsp;                    |&nbsp;| T \* **any_cast<T>**( any * )     | pointer to obtained value |
+| Swap                      |&nbsp;| void **swap**( any & x, any & y ) | exchange contents |
 
 ### Configuration macros
 
