@@ -12,7 +12,7 @@ cmake_minimum_required( VERSION 3.0 )
 option( ANY_LITE_OPT_BUILD_TESTS    "Build and perform any-lite tests" ON )
 option( ANY_LITE_OPT_BUILD_EXAMPLES "Build any-lite examples" OFF )
 
-project( any_lite )
+project( any_lite LANGUAGES CXX )
 
 set( package_name "any-lite" )
 
