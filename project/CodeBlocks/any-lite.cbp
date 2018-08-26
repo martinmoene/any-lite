@@ -36,6 +36,7 @@ Daniel Krügler <daniel dot kruegler at gmail dot com>
 		<Unit filename="../../example/04-any-variant.cpp" />
 		<Unit filename="../../include/nonstd/any-org.hpp" />
 		<Unit filename="../../include/nonstd/any.hpp" />
+		<Unit filename="../../script/update-version.py" />
 		<Unit filename="../../test/CMakeLists.txt" />
 		<Unit filename="../../test/any-main.t.cpp" />
 		<Unit filename="../../test/any-main.t.hpp" />
