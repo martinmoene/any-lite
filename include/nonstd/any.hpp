@@ -47,7 +47,7 @@
 #define any_CPP17_OR_GREATER  ( any_CPLUSPLUS >= 201703L )
 #define any_CPP20_OR_GREATER  ( any_CPLUSPLUS >= 202000L )
 
-// use C++17 std::any if available and requested:
+// Use C++17 std::any if available and requested:
 
 #if any_CPP17_OR_GREATER && defined(__has_include ) && __has_include( <any> )
 # define any_HAVE_STD_ANY  1
@@ -77,7 +77,7 @@ namespace nonstd {
     using std::in_place_type_t;
 }
 
-#else // C++17 std::any
+#else // any_USES_STD_ANY
 
 #include <typeinfo>
 #include <utility>
@@ -601,6 +601,6 @@ using namespace any_lite;
 
 } // namespace nonstd
 
-#endif // have C++17 std::any
+#endif // any_USES_STD_ANY
 
 #endif // NONSTD_ANY_LITE_HPP
