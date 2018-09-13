@@ -42,7 +42,7 @@ CASE( "any configuration" "[.any][.config]" )
     any_PRESENT( any_USES_STD_ANY );
     any_PRESENT( any_CONFIG_SELECT_ANY );
     any_PRESENT( any_ANY_DEFAULT );
-    any_PRESENT( any_ANY_LITE );
+    any_PRESENT( any_ANY_NONSTD );
     any_PRESENT( any_ANY_STD );
     any_PRESENT( any_CPLUSPLUS );
 }

@@ -23,11 +23,11 @@
 // any-lite configuration:
 
 #define any_ANY_DEFAULT  0
-#define any_ANY_LITE     1
+#define any_ANY_NONSTD   1
 #define any_ANY_STD      2
 
 #if !defined( any_CONFIG_SELECT_ANY )
-# define any_CONFIG_SELECT_ANY  ( any_HAVE_STD_ANY ? any_ANY_STD : any_ANY_LITE )
+# define any_CONFIG_SELECT_ANY  ( any_HAVE_STD_ANY ? any_ANY_STD : any_ANY_NONSTD )
 #endif
 
 // C++ language version detection (C++20 is speculative):

@@ -2,7 +2,7 @@
 #
 # https://github.com/martinmoene/any-lite
 #
-# Distributed under the Boost Software License, Version 1.0. 
+# Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 cmake_minimum_required( VERSION 3.5 )
@@ -16,16 +16,19 @@ set( any_lite_version "0.1.0" )
 option( ANY_LITE_OPT_BUILD_TESTS    "Build and perform any-lite tests" ON )
 option( ANY_LITE_OPT_BUILD_EXAMPLES "Build any-lite examples" OFF )
 
+option( ANY_LITE_OPT_SELECT_STD      "Select std::any"    OFF )
+option( ANY_LITE_OPT_SELECT_NONSTD   "Select nonstd::any" OFF )
+
 project( any_lite LANGUAGES CXX )
 
 set( package_name "any-lite" )
 
 # Interface library:
 
-add_library(                
+add_library(
     ${package_name} INTERFACE )
-    
-target_include_directories( 
+
+target_include_directories(
     ${package_name} INTERFACE "$<BUILD_INTERFACE:${include_source_dir}>" )
 
 enable_testing()

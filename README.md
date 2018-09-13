@@ -31,9 +31,9 @@ using namespace nonstd;
 int main()
 {
     std::string hello = "hello, world";
-    
+
     any var;
-    
+
     var =  'v' ; assert( any_cast<char>( var ) == 'v' );
     var =   7  ; assert( any_cast<int >( var ) ==  7  );
     var =  42L ; assert( any_cast<long>( var ) == 42L );
@@ -59,7 +59,7 @@ In a nutshell
 License
 -------
 *any lite* is distributed under the [Boost Software License](https://github.com/martinmoene/any-lite/blob/master/LICENSE.txt).
- 
+
 
 Dependencies
 ------------
@@ -139,7 +139,7 @@ Define this macro to override the auto-detection of the supported C++ standard, 
 At default, *any lite* uses `std::any` if it is available and lets you use it via namespace `nonstd`. You can however override this default and explicitly request to use `std::any` or any lite's `nonstd::any` as `nonstd::any` via the following macros.
 
 -D<b>any\_CONFIG\_SELECT\_ANY</b>=any_ANY_DEFAULT  
-Define this to `any_ANY_STD` to select `std::any` as `nonstd::any`. Define this to `any_ANY_LITE` to select `nonstd::any` as `nonstd::any`. Default is undefined, which has the same effect as defining to `any_ANY_DEFAULT`.
+Define this to `any_ANY_STD` to select `std::any` as `nonstd::any`. Define this to `any_ANY_NONSTD` to select `nonstd::any` as `nonstd::any`. Default is undefined, which has the same effect as defining to `any_ANY_DEFAULT`.
 
 
 Reported to work with
@@ -201,7 +201,7 @@ Other implementations of any
 ----------------------------
 - Isabella Muerte. [MNMLSTC Core](https://github.com/mnmlstc/core) (C++11).
 - Kevlin Henney. [Boost.Any](http://www.boost.org/doc/libs/1_62_0/doc/html/any.html). Safe, generic container for single values of different value types. 2001.
- 
+
 
 Notes and References
 --------------------
