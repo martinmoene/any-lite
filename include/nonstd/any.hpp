@@ -55,7 +55,7 @@
 # define any_HAVE_STD_ANY  0
 #endif
 
-#define any_USES_STD_ANY  ( (any_CONFIG_SELECT_ANY == any_ANY_STD) || ((any_CONFIG_SELECT_ANY == any_ANY_DEFAULT) && any_HAVE_STD_ANY) )
+#define  any_USES_STD_ANY  ( (any_CONFIG_SELECT_ANY == any_ANY_STD) || ((any_CONFIG_SELECT_ANY == any_ANY_DEFAULT) && any_HAVE_STD_ANY) )
 
 // Using std::any:
 
@@ -213,10 +213,35 @@ namespace nonstd {
 // in_place: code duplicated in any-lite, expected-lite, optional-lite, variant-lite:
 //
 
-#if ! defined nonstd_lite_HAVE_IN_PLACE_TYPES
+#if   ! nonstd_lite_HAVE_IN_PLACE_TYPES
+#define nonstd_lite_HAVE_IN_PLACE_TYPES  1
+
+// C++17 std::in_place in <utility>:
+
+#if any_CPP17_OR_GREATER
 
 namespace nonstd {
 
+using std::in_place;
+using std::in_place_type;
+using std::in_place_index;
+using std::in_place_t;
+using std::in_place_type_t;
+using std::in_place_index_t;
+
+#define nonstd_lite_in_place_t(      T)  std::in_place_t
+#define nonstd_lite_in_place_type_t( T)  std::in_place_type_t<T>
+#define nonstd_lite_in_place_index_t(T)  std::in_place_index_t<I>
+
+#define nonstd_lite_in_place(      T)    std::in_place_t{}
+#define nonstd_lite_in_place_type( T)    std::in_place_type_t<T>{}
+#define nonstd_lite_in_place_index(T)    std::in_place_index_t<I>{}
+
+} // namespace nonstd
+
+#else // any_CPP17_OR_GREATER
+
+namespace nonstd {
 namespace detail {
 
 template< class T >
@@ -255,13 +280,17 @@ inline in_place_t in_place_index( detail::in_place_index_tag<I> = detail::in_pla
 
 // mimic templated typedef:
 
+#define nonstd_lite_in_place_t(      T)  nonstd::in_place_t(&)( nonstd::detail::in_place_type_tag<T>  )
 #define nonstd_lite_in_place_type_t( T)  nonstd::in_place_t(&)( nonstd::detail::in_place_type_tag<T>  )
 #define nonstd_lite_in_place_index_t(T)  nonstd::in_place_t(&)( nonstd::detail::in_place_index_tag<I> )
 
-#define nonstd_lite_HAVE_IN_PLACE_TYPES  1
+#define nonstd_lite_in_place(      T)    nonstd::in_place_type<T>
+#define nonstd_lite_in_place_type( T)    nonstd::in_place_type<T>
+#define nonstd_lite_in_place_index(T)    nonstd::in_place_index<I>
 
 } // namespace nonstd
 
+#endif // any_CPP17_OR_GREATER
 #endif // nonstd_lite_HAVE_IN_PLACE_TYPES
 
 //
@@ -349,7 +378,7 @@ public:
         class T, class... Args
         , typename = typename std::enable_if< std::is_constructible<T, Args...>::value >::type
     >
-    explicit any( nonstd_lite_in_place_type_t(T), Args&&... args )
+    explicit any( nonstd_lite_in_place_t(T), Args&&... args )
     : content( new holder<T>( T( std::forward<Args>(args)... ) ) )
     {}
 
@@ -357,7 +386,7 @@ public:
         class T, class U, class... Args
         , typename = typename std::enable_if< std::is_constructible<T, std::initializer_list<U>&, Args...>::value >::type
     >
-    explicit any( nonstd_lite_in_place_type_t(T), std::initializer_list<U> il, Args&&... args )
+    explicit any( nonstd_lite_in_place_t(T), std::initializer_list<U> il, Args&&... args )
     : content( new holder<T>( T( il, std::forward<Args>(args)... ) ) )
     {}
 
