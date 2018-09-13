@@ -217,7 +217,7 @@ namespace nonstd {
 // in_place: code duplicated in any-lite, expected-lite, optional-lite, variant-lite:
 //
 
-#if   ! nonstd_lite_HAVE_IN_PLACE_TYPES
+#ifndef nonstd_lite_HAVE_IN_PLACE_TYPES
 #define nonstd_lite_HAVE_IN_PLACE_TYPES  1
 
 // C++17 std::in_place in <utility>:
@@ -358,16 +358,16 @@ public:
     : content( any_nullptr )
     {}
 
-    any( any const & rhs )
-    : content( rhs.content ? rhs.content->clone() : any_nullptr )
+    any( any const & other )
+    : content( other.content ? other.content->clone() : any_nullptr )
     {}
 
 #if any_CPP11_OR_GREATER
 
-    any( any && rhs ) any_noexcept
-    : content( std::move( rhs.content ) )
+    any( any && other ) any_noexcept
+    : content( std::move( other.content ) )
     {
-        rhs.content = any_nullptr;
+        other.content = any_nullptr;
     }
 
     template<
@@ -382,7 +382,7 @@ public:
         class T, class... Args
         , typename = typename std::enable_if< std::is_constructible<T, Args...>::value >::type
     >
-    explicit any( nonstd_lite_in_place_t(T), Args&&... args )
+    explicit any( nonstd_lite_in_place_type_t(T), Args&&... args )
     : content( new holder<T>( T( std::forward<Args>(args)... ) ) )
     {}
 
@@ -390,7 +390,7 @@ public:
         class T, class U, class... Args
         , typename = typename std::enable_if< std::is_constructible<T, std::initializer_list<U>&, Args...>::value >::type
     >
-    explicit any( nonstd_lite_in_place_t(T), std::initializer_list<U> il, Args&&... args )
+    explicit any( nonstd_lite_in_place_type_t(T), std::initializer_list<U> il, Args&&... args )
     : content( new holder<T>( T( il, std::forward<Args>(args)... ) ) )
     {}
 
@@ -408,17 +408,17 @@ public:
         reset();
     }
 
-    any & operator=( any const & rhs )
+    any & operator=( any const & other )
     {
-        any( rhs ).swap( *this );
+        any( other ).swap( *this );
         return *this;
     }
 
 #if any_CPP11_OR_GREATER
 
-    any & operator=( any && rhs ) any_noexcept
+    any & operator=( any && other ) any_noexcept
     {
-        any( std::move( rhs ) ).swap( *this );
+        any( std::move( other ) ).swap( *this );
         return *this;
     }
 
@@ -426,9 +426,9 @@ public:
         class ValueType, class T = typename std::decay<ValueType>::type
         , typename = typename std::enable_if< ! std::is_same<T, any>::value >::type
     >
-    any & operator=( ValueType && rhs )
+    any & operator=( ValueType && value )
     {
-        any( std::move( rhs ) ).swap( *this );
+        any( std::move( value ) ).swap( *this );
         return *this;
     }
 
@@ -450,9 +450,9 @@ public:
 #else
 
     template< class ValueType >
-    any & operator=( ValueType const & rhs )
+    any & operator=( ValueType const & value )
     {
-        any( rhs ).swap( *this );
+        any( value ).swap( *this );
         return *this;
     }
 
@@ -463,9 +463,9 @@ public:
         delete content; content = any_nullptr;
     }
 
-    void swap( any & rhs ) any_noexcept
+    void swap( any & other ) any_noexcept
     {
-        std::swap( content, rhs.content );
+        std::swap( content, other.content );
     }
 
     bool has_value() const any_noexcept
@@ -547,13 +547,13 @@ inline void swap( any & x, any & y ) any_noexcept
 template< class T, class ...Args >
 inline any make_any( Args&& ...args )
 {
-    return any( in_place<T>, std::forward<Args>(args)...);
+    return any( nonstd_lite_in_place_type(T), std::forward<Args>(args)...);
 }
 
 template< class T, class U, class ...Args >
 inline any make_any( std::initializer_list<U> il, Args&& ...args )
 {
-    return any( in_place<T>, il, std::forward<Args>(args)...);
+    return any( nonstd_lite_in_place_type(T), il, std::forward<Args>(args)...);
 }
 
 #endif // any_CPP11_OR_GREATER
