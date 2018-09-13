@@ -210,7 +210,7 @@ namespace nonstd {
 #endif
 
 //
-// in_place: code duplicated in any-lite, optional-lite, variant-lite:
+// in_place: code duplicated in any-lite, expected-lite, optional-lite, variant-lite:
 //
 
 #if ! defined nonstd_lite_HAVE_IN_PLACE_TYPES
