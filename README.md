@@ -51,7 +51,7 @@ In a nutshell
 -------------
 **any lite** is a single-file header-only library to represent a type-safe container for single values of any type. The library aims to provide a [C++17-like any](http://en.cppreference.com/w/cpp/utility/any) for use with C++98 and later. If available, std::any is used.
 
-**Features and properties of any lite** are ease of installation (single header), freedom of dependencies other than the standard library. *any lite* shares the approach to in-place tags with [variant-lite](https://github.com/martinmoene/variant-lite) and with [optional-lite](https://github.com/martinmoene/optional-lite) and these libraries can be used together.
+**Features and properties of any lite** are ease of installation (single header), freedom of dependencies other than the standard library. *any lite* shares the approach to in-place tags with [expected-lite](https://github.com/martinmoene/expected-lite), [optional-lite](https://github.com/martinmoene/optional-lite) and with [variant-lite](https://github.com/martinmoene/variant-lite) and these libraries can be used together.
 
 **Limitations of any lite** are the absence of small-object optimization: all contained objects are dynamically allocated. Move construction, move assignment and emplacement require C++11 and are not supported when compiling under C++98.
 
