@@ -19,6 +19,8 @@ option( ANY_LITE_OPT_BUILD_EXAMPLES "Build any-lite examples" OFF )
 option( ANY_LITE_OPT_SELECT_STD      "Select std::any"    OFF )
 option( ANY_LITE_OPT_SELECT_NONSTD   "Select nonstd::any" OFF )
 
+include( GNUInstallDirs )
+
 project( any_lite LANGUAGES CXX )
 
 set( package_name "any-lite" )
@@ -30,6 +32,13 @@ add_library(
 
 target_include_directories(
     ${package_name} INTERFACE "$<BUILD_INTERFACE:${include_source_dir}>" )
+
+# Installation:
+
+install( 
+    DIRECTORY ${CMAKE_SOURCE_DIR}/include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} )
+
+# If requested, build and perform tests, build examples:
 
 enable_testing()
 
