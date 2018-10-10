@@ -113,7 +113,7 @@ namespace nonstd {
 # define any_COMPILER_CLANG_VERSION  0
 #endif
 
-#if defined(__GNUC__) && !defined(__apple_build_version__)
+#if defined(__GNUC__) && !defined(__clang__)
 # define any_COMPILER_GNUC_VERSION  any_COMPILER_VERSION(__GNUC__, __GNUC_MINOR__, __GNUC_PATCHLEVEL__)
 #else
 # define any_COMPILER_GNUC_VERSION  0
