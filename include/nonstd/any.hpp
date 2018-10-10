@@ -107,13 +107,13 @@ namespace nonstd {
 
 #define any_COMPILER_VERSION( major, minor, patch )  ( 10 * ( 10 * (major) + (minor) ) + (patch) )
 
-#if defined __clang__
+#if defined(__clang__)
 # define any_COMPILER_CLANG_VERSION  any_COMPILER_VERSION(__clang_major__, __clang_minor__, __clang_patchlevel__)
 #else
 # define any_COMPILER_CLANG_VERSION  0
 #endif
 
-#if defined __GNUC__
+#if defined(__GNUC__) && !defined(__apple_build_version__)
 # define any_COMPILER_GNUC_VERSION  any_COMPILER_VERSION(__GNUC__, __GNUC_MINOR__, __GNUC_PATCHLEVEL__)
 #else
 # define any_COMPILER_GNUC_VERSION  0
