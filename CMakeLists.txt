@@ -13,7 +13,7 @@ set( any_lite_version "0.1.0" )
 
 # At default, enable building and performing of tests and building of examples:
 
-option( ANY_LITE_OPT_BUILD_TESTS    "Build and perform any-lite tests" ON )
+option( ANY_LITE_OPT_BUILD_TESTS    "Build and perform any-lite tests" OFF )
 option( ANY_LITE_OPT_BUILD_EXAMPLES "Build any-lite examples" OFF )
 
 option( ANY_LITE_OPT_SELECT_STD      "Select std::any"    OFF )
@@ -35,7 +35,7 @@ target_include_directories(
 
 # Installation:
 
-install( 
+install(
     DIRECTORY ${CMAKE_SOURCE_DIR}/include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} )
 
 # If requested, build and perform tests, build examples:
