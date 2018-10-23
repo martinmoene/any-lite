@@ -24,6 +24,7 @@ include( GNUInstallDirs )
 project( any_lite LANGUAGES CXX )
 
 set( package_name "any-lite" )
+set( include_source_dir "${PROJECT_SOURCE_DIR}/include" )
 
 # Interface library:
 
