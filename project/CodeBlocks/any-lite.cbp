@@ -30,6 +30,7 @@ Daniel Krügler <daniel dot kruegler at gmail dot com>
 		<Unit filename="../../CMakeLists.txt" />
 		<Unit filename="../../README.md" />
 		<Unit filename="../../appveyor.yml" />
+		<Unit filename="../../conanfile.py" />
 		<Unit filename="../../example/01-basic.cpp" />
 		<Unit filename="../../example/02-property.cpp" />
 		<Unit filename="../../example/03-example.cpp" />
