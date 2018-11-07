@@ -14,6 +14,9 @@ if "%1" == "" set std=c++11
 call :CompilerVersion version
 echo g++ %version%: %std% %args%
 
+set UCAP=%unit%
+call :toupper UCAP
+
 set unit_select=-D%unit%_CONFIG_SELECT_%UCAP%=%unit%_%UCAP%_DEFAULT
 ::set unit_select=-D%unit%_CONFIG_SELECT_%UCAP%=%unit%_%UCAP%_NONSTD
 ::set unit_select=-D%unit%_CONFIG_SELECT_%UCAP%=%unit%_%UCAP%_STD

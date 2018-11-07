@@ -10,7 +10,7 @@ set unit=any
 set std=%1
 if "%std%"=="" set std=c++14
 
-set  clang=C:\Program Files\LLVM\bin\clang
+set  clang=clang
 
 call :CompilerVersion version
 echo clang %version%: %std%
@@ -19,7 +19,7 @@ set UCAP=%unit%
 call :toupper UCAP
 
 set unit_select=-D%unit%_CONFIG_SELECT_%UCAP%=%unit%_%UCAP%_DEFAULT
-::set unit_select=-D%unit%_CONFIG_SELECT_%UCAP%=%unit%_%UCAP%_LITE
+::set unit_select=-D%unit%_CONFIG_SELECT_%UCAP%=%unit%_%UCAP%_NONSTD
 ::set unit_select=-D%unit%_CONFIG_SELECT_%UCAP%=%unit%_%UCAP%_STD
 
 set unit_config=
@@ -28,7 +28,7 @@ rem -flto / -fwhole-program
 set  optflags=-O2
 set warnflags=-Wall -Wextra -Wpedantic -Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-padded -Wno-missing-noreturn -Wno-documentation-unknown-command -Wno-documentation-deprecated-sync -Wno-documentation -Wno-weak-vtables -Wno-missing-prototypes -Wno-missing-variable-declarations -Wno-exit-time-destructors -Wno-global-constructors
 
-"%clang%" -std=%std% %optflags% %warnflags% %unit_select% %unit_config% -fms-compatibility-version=19.00 -isystem "%VCInstallDir%include" -isystem "%WindowsSdkDir_71A%include" -I../include/nonstd -o %unit%-main.t.exe %unit%-main.t.cpp %unit%.t.cpp && %unit%-main.t.exe
+"%clang%" -m32 -std=%std% %optflags% %warnflags% %unit_select% %unit_config% -fms-compatibility-version=19.00 -isystem "%VCInstallDir%include" -isystem "%WindowsSdkDir_71A%include" -I../include/nonstd -o %unit%-main.t.exe %unit%-main.t.cpp %unit%.t.cpp && %unit%-main.t.exe
 endlocal & goto :EOF
 
 :: subroutines:
@@ -41,7 +41,7 @@ set tmpsource=%tmpprogram%.c
 echo #include ^<stdio.h^>     > %tmpsource%
 echo int main(){printf("%%d.%%d.%%d\n",__clang_major__,__clang_minor__,__clang_patchlevel__);} >> %tmpsource%
 
-"%clang%" -o %tmpprogram% %tmpsource% >nul
+"%clang%" -m32 -o %tmpprogram% %tmpsource% >nul
 for /f %%x in ('%tmpprogram%') do set version=%%x
 del %tmpprogram%.* >nul
 endlocal & set %1=%version%& goto :EOF
