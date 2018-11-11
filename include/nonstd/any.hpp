@@ -34,7 +34,7 @@
 // Note: VC14.0/1900 (VS2015) lacks too much from C++14.
 
 #ifndef   any_CPLUSPLUS
-# ifdef  _MSVC_LANG
+# if defined(_MSVC_LANG ) && !defined(__clang__)
 #  define any_CPLUSPLUS  (_MSC_VER == 1900 ? 201103L : _MSVC_LANG )
 # else
 #  define any_CPLUSPLUS  __cplusplus
@@ -185,9 +185,11 @@ namespace nonstd {
 // MSVC++ 14.0 _MSC_VER == 1900 (Visual Studio 2015)
 // MSVC++ 14.1 _MSC_VER >= 1910 (Visual Studio 2017)
 
-#if defined( _MSC_VER ) && !defined( __clang__ )
+#if defined(_MSC_VER ) && !defined(__clang__)
+# define any_COMPILER_MSVC_VER      (_MSC_VER )
 # define any_COMPILER_MSVC_VERSION  (_MSC_VER / 10 - 10 * ( 5 + (_MSC_VER < 1900 ) ) )
 #else
+# define any_COMPILER_MSVC_VER      0
 # define any_COMPILER_MSVC_VERSION  0
 #endif
 
@@ -218,10 +220,10 @@ namespace nonstd {
 # define any_HAS_CPP0X  0
 #endif
 
-#define any_CPP11_90   (any_CPP11_OR_GREATER || any_COMPILER_MSVC_VERSION >= 90)
-#define any_CPP11_100  (any_CPP11_OR_GREATER || any_COMPILER_MSVC_VERSION >= 100)
-#define any_CPP11_120  (any_CPP11_OR_GREATER || any_COMPILER_MSVC_VERSION >= 120)
-#define any_CPP11_140  (any_CPP11_OR_GREATER || any_COMPILER_MSVC_VERSION >= 140)
+#define any_CPP11_90   (any_CPP11_OR_GREATER || any_COMPILER_MSVC_VER >= 1500)
+#define any_CPP11_100  (any_CPP11_OR_GREATER || any_COMPILER_MSVC_VER >= 1600)
+#define any_CPP11_120  (any_CPP11_OR_GREATER || any_COMPILER_MSVC_VER >= 1800)
+#define any_CPP11_140  (any_CPP11_OR_GREATER || any_COMPILER_MSVC_VER >= 1900)
 
 #define any_CPP14_000  (any_CPP14_OR_GREATER)
 #define any_CPP17_000  (any_CPP17_OR_GREATER)
