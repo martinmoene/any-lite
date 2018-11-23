@@ -7,21 +7,29 @@
 
 cmake_minimum_required( VERSION 3.5 )
 
-# any-lite version, updated by script/update-version.py:
+# any-lite project and version, updated by script/update-version.py:
+
+project( any_lite LANGUAGES CXX )
 
 set( any_lite_version "0.1.0" )
 
+# Toplevel or subproject:
+
+if ( CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR )
+    set( any_IS_TOPLEVEL_PROJECT TRUE )
+else()
+    set( any_IS_TOPLEVEL_PROJECT FALSE )
+endif()
+
 # At default, enable building and performing of tests and building of examples:
 
-option( ANY_LITE_OPT_BUILD_TESTS    "Build and perform any-lite tests" OFF )
+option( ANY_LITE_OPT_BUILD_TESTS    "Build and perform any-lite tests" ${any_IS_TOPLEVEL_PROJECT} )
 option( ANY_LITE_OPT_BUILD_EXAMPLES "Build any-lite examples" OFF )
 
 option( ANY_LITE_OPT_SELECT_STD      "Select std::any"    OFF )
 option( ANY_LITE_OPT_SELECT_NONSTD   "Select nonstd::any" OFF )
 
 include( GNUInstallDirs )
-
-project( any_lite LANGUAGES CXX )
 
 set( package_name "any-lite" )
 set( include_source_dir "${PROJECT_SOURCE_DIR}/include" )
