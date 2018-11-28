@@ -253,7 +253,7 @@ namespace nonstd {
 
 #define any_HAVE_NODISCARD              any_CPP17_000
 
-// Presence of C++ library features:
+// Presence of C++ language features:
 
 #if any_HAVE_CONSTEXPR_11
 # define any_constexpr constexpr
