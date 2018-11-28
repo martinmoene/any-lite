@@ -36,7 +36,7 @@ CASE( "any-lite version" "[.any][.version]" )
     any_PRESENT( any_lite_VERSION );
 }
 
-CASE( "any configuration" "[.any][.config]" )
+CASE( "any-lite configuration" "[.any][.config]" )
 {
     any_PRESENT( any_HAVE_STD_ANY );
     any_PRESENT( any_USES_STD_ANY );
@@ -50,6 +50,12 @@ CASE( "any configuration" "[.any][.config]" )
 CASE( "__cplusplus" "[.stdc++]" )
 {
     any_PRESENT( __cplusplus );
+
+#ifdef _MSVC_LANG
+    any_PRESENT( _MSVC_LANG );
+#else
+    any_ABSENT(  _MSVC_LANG );
+#endif
 }
 
 CASE( "Compiler version" "[.compiler]" )
