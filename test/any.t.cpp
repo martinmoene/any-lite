@@ -8,7 +8,18 @@
 
 #include "any-main.t.hpp"
 
+// Suppress:
+// - unused parameter, for cases without assertions such as [.std...]
+#if defined(__clang__)
+# pragma clang diagnostic ignored "-Wunused-member-function"
+# pragma clang diagnostic ignored "-Wunneeded-member-function"
+#elif defined __GNUC__
+//# pragma GCC   diagnostic ignored ""
+#endif
+
 // Note: use any_cast( ptr-to-any ) to preserve move-state.
+
+using namespace nonstd;
 
 namespace {
 
@@ -98,11 +109,11 @@ struct InitList
     char c;
     S s;
 
-    InitList( std::initializer_list<int> il, char c, S const & s)
-    : vec( il ), c( c ), s( s ) {}
+    InitList( std::initializer_list<int> il, char k, S const & t)
+    : vec( il ), c( k ), s( t ) {}
 
-    InitList( std::initializer_list<int> il, char c, S && s)
-    : vec( il ), c( c ), s( std::move(s) ) {}
+    InitList( std::initializer_list<int> il, char k, S && t)
+    : vec( il ), c( k ), s( std::move(t) ) {}
 };
 #endif
 
