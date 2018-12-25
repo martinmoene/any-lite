@@ -12,7 +12,7 @@ cmake_minimum_required( VERSION 3.5 )
 project(
     any_lite
     VERSION 0.1.0
-    DESCRIPTION "A C++17-like any, a type-safe container for single values of any type for C++98, C++11 and later in a single-file header-only library"
+#   DESCRIPTION "A C++17-like any, a type-safe container for single values of any type for C++98, C++11 and later in a single-file header-only library"
 #   HOMEPAGE_URL "https://github.com/martinmoene/any-lite"
     LANGUAGES CXX )
 
