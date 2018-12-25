@@ -9,9 +9,14 @@ cmake_minimum_required( VERSION 3.5 )
 
 # any-lite project and version, updated by script/update-version.py:
 
-project( any_lite LANGUAGES CXX )
+project(
+    any_lite
+    VERSION 0.1.0
+    DESCRIPTION "A C++17-like any, a type-safe container for single values of any type for C++98, C++11 and later in a single-file header-only library"
+#   HOMEPAGE_URL "https://github.com/martinmoene/any-lite"
+    LANGUAGES CXX )
 
-set( any_lite_version "0.1.0" )
+set( ${PROJECT_NAME}_version "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}" )
 
 # Toplevel or subproject:
 
@@ -21,7 +26,7 @@ else()
     set( any_IS_TOPLEVEL_PROJECT FALSE )
 endif()
 
-# At default, enable building and performing of tests and building of examples:
+# If toplevel project, enable building and performing of tests, disable building of examples:
 
 option( ANY_LITE_OPT_BUILD_TESTS    "Build and perform any-lite tests" ${any_IS_TOPLEVEL_PROJECT} )
 option( ANY_LITE_OPT_BUILD_EXAMPLES "Build any-lite examples" OFF )
