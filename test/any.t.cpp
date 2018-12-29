@@ -11,7 +11,6 @@
 // Suppress:
 // - unused parameter, for cases without assertions such as [.std...]
 #if defined(__clang__)
-# pragma clang diagnostic ignored "-Wunused-member-function"
 # pragma clang diagnostic ignored "-Wunneeded-member-function"
 #elif defined __GNUC__
 //# pragma GCC   diagnostic ignored ""
