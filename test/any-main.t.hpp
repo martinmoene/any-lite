@@ -11,7 +11,7 @@
 #ifndef TEST_ANY_LITE_H_INCLUDED
 #define TEST_ANY_LITE_H_INCLUDED
 
-#include "any.hpp"
+#include "nonstd/any.hpp"
 #include "lest_cpp03.hpp"
 
 #define CASE( name ) lest_CASE( specification(), name )
