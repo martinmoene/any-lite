@@ -9,10 +9,11 @@ cmake_minimum_required( VERSION 3.5 )
 
 project( test LANGUAGES CXX )
 
-set( UNIT      any )
-set( PACKAGE   ${UNIT}-lite )
-set( PROGRAM   ${UNIT}-lite )
-set( SOURCES   ${UNIT}-main.t.cpp ${UNIT}.t.cpp )
+set( PACKAGE   ${package_name} )
+set( PROGRAM   ${unit_name}-lite )
+set( SOURCES   ${unit_name}-main.t.cpp ${unit_name}.t.cpp )
+
+message( STATUS "Subproject '${PROJECT_NAME}', programs '${PROGRAM}-*'")
 
 # Configure any-lite for testing:
 
