@@ -21,7 +21,7 @@ Example usage
 -------------
 
 ```Cpp
-#include "any.hpp"
+#include "nonstd/any.hpp"
 
 #include <cassert>
 #include <string>
@@ -44,7 +44,7 @@ int main()
 ### Compile and run
 
 ```
-prompt> g++ -Wall -I../include/nonstd -o 01-basic 01-basic.cpp && 01-basic
+prompt> g++ -Wall -I../include -o 01-basic 01-basic.cpp && 01-basic
 ```
 
 In a nutshell
@@ -134,6 +134,10 @@ Synopsis
 ### Standard selection macro
 \-D<b>any\_CPLUSPLUS</b>=199711L
 Define this macro to override the auto-detection of the supported C++ standard, if your compiler does not set the `__cpluplus` macro correctly.
+
+### Disable exceptions
+-D<b>any_CONFIG_NO_EXCEPTIONS</b>=0
+Define this to 1 if you want to compile without exceptions. If not defined, the header tries and detect if exceptions have been disabled (e.g. via `-fno-exceptions`). Default is undefined.
 
 ### Select `std::any` or `nonstd::any`
 At default, *any lite* uses `std::any` if it is available and lets you use it via namespace `nonstd`. You can however override this default and explicitly request to use `std::any` or any lite's `nonstd::any` as `nonstd::any` via the following macros.

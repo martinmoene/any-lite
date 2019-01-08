@@ -36,6 +36,7 @@ Daniel Krügler <daniel dot kruegler at gmail dot com>
 		<Unit filename="../../example/02-property.cpp" />
 		<Unit filename="../../example/03-example.cpp" />
 		<Unit filename="../../example/04-any-variant.cpp" />
+		<Unit filename="../../example/05-no-exceptions.cpp" />
 		<Unit filename="../../include/nonstd/any-org.hpp" />
 		<Unit filename="../../include/nonstd/any.hpp" />
 		<Unit filename="../../script/update-version.py" />

@@ -1,4 +1,4 @@
-#include "any.hpp"
+#include "nonstd/any.hpp"
 
 #include <algorithm>
 #include <iostream>
@@ -24,7 +24,7 @@ std::ostream & operator<<( std::ostream & os, any const & v )
 
 void print( std::ostream & os, property const & p )
 {
-    os << "[" << p.name << ":" << p.value << "] "; 
+    os << "[" << p.name << ":" << p.value << "] ";
 }
 
 int main()
@@ -32,7 +32,7 @@ int main()
     try
     {
         std::string hello = "hello, world";
-        
+
         std::vector< property > db;
         db.push_back( property( "integral" ,  42    ) );
         db.push_back( property( "string"   ,  hello ) );
@@ -47,6 +47,6 @@ int main()
         std::cerr << "Error: " << e.what() << std::endl;
     }
 }
- 
-// cl -nologo -EHsc -I../include/nonstd 02-property.cpp && 02-property
-// g++ -Wall -I../include/nonstd -o 02-property 02-property.cpp && 02-property
+
+// cl -nologo -EHsc -I../include 02-property.cpp && 02-property
+// g++ -Wall -I../include -o 02-property 02-property.cpp && 02-property

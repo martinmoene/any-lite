@@ -30,6 +30,16 @@
 # define any_CONFIG_SELECT_ANY  ( any_HAVE_STD_ANY ? any_ANY_STD : any_ANY_NONSTD )
 #endif
 
+// Control presence of exception handling (try and auto discover):
+
+#ifndef any_CONFIG_NO_EXCEPTIONS
+# if defined(__cpp_exceptions) || defined(__EXCEPTIONS) || defined(_CPPUNWIND)
+#  define any_CONFIG_NO_EXCEPTIONS  0
+# else
+#  define any_CONFIG_NO_EXCEPTIONS  1
+# endif
+#endif
+
 // C++ language version detection (C++20 is speculative):
 // Note: VC14.0/1900 (VS2015) lacks too much from C++14.
 
@@ -267,7 +277,7 @@ namespace nonstd {
 # define any_constexpr14 /*constexpr*/
 #endif
 
-#if any_HAVE_NOEXCEPT
+#if any_HAVE_NOEXCEPT && ! any_CONFIG_NO_EXCEPTIONS
 # define any_noexcept noexcept
 #else
 # define any_noexcept /*noexcept*/
@@ -286,6 +296,10 @@ namespace nonstd {
 #endif
 
 // additional includes:
+
+#if any_CONFIG_NO_EXCEPTIONS
+# include <cassert>
+#endif
 
 #if ! any_HAVE_NULLPTR
 # include <cstddef>
@@ -342,6 +356,8 @@ template< class T > struct remove_reference<T&> { typedef T type; };
 
 } // namespace detail
 
+#if ! any_CONFIG_NO_EXCEPTIONS
+
 class bad_any_cast : public std::bad_cast
 {
 public:
@@ -354,6 +370,8 @@ public:
       return "any-lite: bad any_cast";
    }
 };
+
+#endif // any_CONFIG_NO_EXCEPTIONS
 
 class any
 {
@@ -562,6 +580,18 @@ inline any make_any( std::initializer_list<U> il, Args&& ...args )
 
 #endif // any_CPP11_OR_GREATER
 
+namespace detail {
+
+inline void throw_bad_any_cast()
+{
+#if any_CONFIG_NO_EXCEPTIONS
+   assert( 0 );
+#else
+   throw bad_any_cast();
+#endif
+}
+} // namespace detail
+
 template<
     class ValueType
 #if any_HAVE_DEFAULT_FUNCTION_TEMPLATE_ARG
@@ -574,7 +604,7 @@ any_nodiscard inline ValueType any_cast( any const & operand )
 
    if ( ! result )
    {
-      throw bad_any_cast();
+      detail::throw_bad_any_cast();
    }
 
    return *result;
@@ -592,7 +622,7 @@ any_nodiscard inline ValueType any_cast( any & operand )
 
    if ( ! result )
    {
-      throw bad_any_cast();
+      detail::throw_bad_any_cast();
    }
 
    return *result;
@@ -612,7 +642,7 @@ any_nodiscard inline ValueType any_cast( any && operand )
 
    if ( ! result )
    {
-      throw bad_any_cast();
+      detail::throw_bad_any_cast();
    }
 
    return *result;
