@@ -179,7 +179,6 @@ namespace nonstd {
 
 #else // any_USES_STD_ANY
 
-#include <typeinfo>
 #include <utility>
 
 // Compiler versions:
@@ -299,6 +298,8 @@ namespace nonstd {
 
 #if any_CONFIG_NO_EXCEPTIONS
 # include <cassert>
+#else
+# include <typeinfo>
 #endif
 
 #if ! any_HAVE_NULLPTR
@@ -580,18 +581,6 @@ inline any make_any( std::initializer_list<U> il, Args&& ...args )
 
 #endif // any_CPP11_OR_GREATER
 
-namespace detail {
-
-inline void throw_bad_any_cast()
-{
-#if any_CONFIG_NO_EXCEPTIONS
-   assert( 0 );
-#else
-   throw bad_any_cast();
-#endif
-}
-} // namespace detail
-
 template<
     class ValueType
 #if any_HAVE_DEFAULT_FUNCTION_TEMPLATE_ARG
@@ -602,10 +591,14 @@ any_nodiscard inline ValueType any_cast( any const & operand )
 {
    const ValueType * result = any_cast< typename detail::add_const< typename detail::remove_reference<ValueType>::type >::type >( &operand );
 
+#if any_CONFIG_NO_EXCEPTIONS
+   assert( result );
+#else
    if ( ! result )
    {
-      detail::throw_bad_any_cast();
+       throw bad_any_cast();
    }
+#endif
 
    return *result;
 }
@@ -620,10 +613,14 @@ any_nodiscard inline ValueType any_cast( any & operand )
 {
    const ValueType * result = any_cast< typename detail::remove_reference<ValueType>::type >( &operand );
 
+#if any_CONFIG_NO_EXCEPTIONS
+   assert( result );
+#else
    if ( ! result )
    {
-      detail::throw_bad_any_cast();
+       throw bad_any_cast();
    }
+#endif
 
    return *result;
 }
@@ -640,10 +637,14 @@ any_nodiscard inline ValueType any_cast( any && operand )
 {
    const ValueType * result = any_cast< typename detail::remove_reference<ValueType>::type >( &operand );
 
+#if any_CONFIG_NO_EXCEPTIONS
+   assert( result );
+#else
    if ( ! result )
    {
-      detail::throw_bad_any_cast();
+       throw bad_any_cast();
    }
+#endif
 
    return *result;
 }
