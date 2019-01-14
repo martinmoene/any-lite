@@ -276,7 +276,7 @@ namespace nonstd {
 # define any_constexpr14 /*constexpr*/
 #endif
 
-#if any_HAVE_NOEXCEPT && ! any_CONFIG_NO_EXCEPTIONS
+#if any_HAVE_NOEXCEPT
 # define any_noexcept noexcept
 #else
 # define any_noexcept /*noexcept*/
