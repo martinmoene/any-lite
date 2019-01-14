@@ -7,7 +7,7 @@ int main()
     any var =  'v' ;
 
     char chr = any_cast<char>( var );   // ok
-    int  val = any_cast<int >( var );   // asserts
+    int  val = any_cast<int >( var );   // asserts (normally throws)
 }
 
 // cl -nologo -I../include 05-no-exceptions.cpp && 05-no-exceptions
