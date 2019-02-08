@@ -586,7 +586,7 @@ CASE( "any_cast: Allows to obtain any's content by value (any &)" )
 CASE( "any_cast: Allows to obtain any's content by value (any &&)" )
 {
 #if any_CPP11_OR_GREATER
-    struct F { static any && ident( any && a ) { return std::forward<any>(a); } };
+    struct F { static any && ident( any && a ) { return std::move(a); } };
 
     EXPECT( any_cast<int>( F::ident( any(7) ) ) == 7 );
 #else
@@ -629,7 +629,7 @@ CASE( "any_cast: Throws bad_any_cast if requested type differs from content type
 CASE( "any_cast: Throws bad_any_cast if requested type differs from content type (any &&)" )
 {
 #if any_CPP11_OR_GREATER
-    struct F { static any && ident( any && a ) { return std::forward<any>(a); } };
+    struct F { static any && ident( any && a ) { return std::move(a); } };
 
     EXPECT_THROWS_AS( any_cast<double>( F::ident( any(7) ) ), bad_any_cast );
 #else
