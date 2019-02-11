@@ -39,6 +39,7 @@ Daniel Krügler <daniel dot kruegler at gmail dot com>
 		<Unit filename="../../example/05-no-exceptions.cpp" />
 		<Unit filename="../../include/nonstd/any-org.hpp" />
 		<Unit filename="../../include/nonstd/any.hpp" />
+		<Unit filename="../../script/create-vcpkg.py" />
 		<Unit filename="../../script/update-version.py" />
 		<Unit filename="../../script/upload-conan.py" />
 		<Unit filename="../../test/CMakeLists.txt" />
