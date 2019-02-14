@@ -226,7 +226,12 @@ Notes and References
 
 Appendix
 --------
-### A.1 Any Lite test specification
+
+### A.1 Compile-time information
+
+The version of *any lite* is available via tag `[.version]`. The following tags are available for information on the compiler and on the C++ standard library used: `[.compiler]`, `[.stdc++]`, `[.stdlanguage]` and `[.stdlibrary]`.
+
+### A.2 Any lite test specification
 
 ```
 any: Allows to default construct any
