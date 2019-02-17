@@ -1,5 +1,5 @@
 #include "nonstd/any.hpp"
-#include "variant.hpp"
+#include "nonstd/variant.hpp"
 
 #include <cassert>
 #include <string>
@@ -27,5 +27,5 @@ int main()
     }
 }
 
-// cl -nologo -EHsc -I../include -I../../variant-lite/include/nonstd 04-any-variant.cpp && 04-any-variant
-// g++ -Wall -I../include -I../../variant-lite/include/nonstd -o 04-any-variant 04-any-variant.cpp && 04-any-variant
+// cl -nologo -EHsc -I../include -I../../variant-lite/include 04-any-variant.cpp && 04-any-variant
+// g++ -Wall -I../include -I../../variant-lite/include -o 04-any-variant 04-any-variant.cpp && 04-any-variant
