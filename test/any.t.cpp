@@ -616,6 +616,8 @@ CASE( "any_cast: Throws bad_any_cast if requested type differs from content type
     any a = 7;
 
     EXPECT_THROWS_AS( any_cast<double>( F::ident(a) ), bad_any_cast );
+//  EXPECT_THROWS_WITH( any_cast<double>( F::ident(a) ), "..." )
+
 }
 
 CASE( "any_cast: Throws bad_any_cast if requested type differs from content type (any &)" )
@@ -635,6 +637,21 @@ CASE( "any_cast: Throws bad_any_cast if requested type differs from content type
 #else
     EXPECT( !!"any: move semantics not available (no C++11)" );
 #endif
+}
+
+CASE( "any_cast: Throws bad_any_cast with non-empty what()" )
+{
+    struct F { static any const & ident( any const & a ) { return a; } };
+    any a = 7;
+
+    try
+    {
+        double d = any_cast<double>( F::ident(a) );
+    }
+    catch( bad_any_cast const & e )
+    {
+        EXPECT( ! std::string( e.what() ).empty() );
+    }
 }
 
 // end of file
