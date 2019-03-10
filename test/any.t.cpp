@@ -41,7 +41,7 @@ enum State
     /* 7 */ value_copy_assigned,
     /* 8 */ value_move_assigned,
     /* 9 */ moved_from,
-    /*10 */ value_constructed,
+    /*10 */ value_constructed
 };
 
 struct V
@@ -646,7 +646,7 @@ CASE( "any_cast: Throws bad_any_cast with non-empty what()" )
 
     try
     {
-        double d = any_cast<double>( F::ident(a) );
+        (void) any_cast<double>( F::ident(a) );
     }
     catch( bad_any_cast const & e )
     {

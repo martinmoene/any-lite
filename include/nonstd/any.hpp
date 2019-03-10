@@ -316,15 +316,33 @@ namespace nonstd {
 # include <tr1/type_traits>
 #endif
 
+// Method enabling
+
+#if any_CPP11_OR_GREATER
+
+#define any_REQUIRES_0(...) \
+    template< bool B = (__VA_ARGS__), typename std::enable_if<B, int>::type = 0 >
+
+#define any_REQUIRES_T(...) \
+    , typename = typename std::enable_if< (__VA_ARGS__), nonstd::any_lite::detail::enabler >::type
+
+#define any_REQUIRES_R(R, ...) \
+    typename std::enable_if<__VA_ARGS__, R>::type
+
+#define any_REQUIRES_A(...) \
+    , typename std::enable_if<__VA_ARGS__, void*>::type = nullptr
+
+#endif
+
 //
 // any:
 //
 
 namespace nonstd {  namespace any_lite {
 
-namespace detail {
-
 // C++11 emulation:
+
+namespace std11 {
 
 #if any_HAVE_ADD_CONST
 
@@ -354,6 +372,14 @@ template< class T > struct remove_reference     { typedef T type; };
 template< class T > struct remove_reference<T&> { typedef T type; };
 
 #endif // any_HAVE_REMOVE_REFERENCE
+
+} // namespace std11
+
+namespace detail {
+
+// for any_REQUIRES_T
+
+/*enum*/ class enabler{};
 
 } // namespace detail
 
@@ -395,7 +421,7 @@ public:
 
     template<
         class ValueType, class T = typename std::decay<ValueType>::type
-        , typename = typename std::enable_if< ! std::is_same<T, any>::value >::type
+        any_REQUIRES_T( ! std::is_same<T, any>::value )
     >
     any( ValueType && value ) any_noexcept
     : content( new holder<T>( std::move( value ) ) )
@@ -403,7 +429,7 @@ public:
 
     template<
         class T, class... Args
-        , typename = typename std::enable_if< std::is_constructible<T, Args...>::value >::type
+        any_REQUIRES_T( std::is_constructible<T, Args&&...>::value )
     >
     explicit any( nonstd_lite_in_place_type_t(T), Args&&... args )
     : content( new holder<T>( T( std::forward<Args>(args)... ) ) )
@@ -411,7 +437,7 @@ public:
 
     template<
         class T, class U, class... Args
-        , typename = typename std::enable_if< std::is_constructible<T, std::initializer_list<U>&, Args...>::value >::type
+        any_REQUIRES_T( std::is_constructible<T, std::initializer_list<U>&, Args&&...>::value )
     >
     explicit any( nonstd_lite_in_place_type_t(T), std::initializer_list<U> il, Args&&... args )
     : content( new holder<T>( T( il, std::forward<Args>(args)... ) ) )
@@ -447,7 +473,7 @@ public:
 
     template<
         class ValueType, class T = typename std::decay<ValueType>::type
-        , typename = typename std::enable_if< ! std::is_same<T, any>::value >::type
+        any_REQUIRES_T( ! std::is_same<T, any>::value )
     >
     any & operator=( ValueType && value )
     {
@@ -463,7 +489,7 @@ public:
 
     template<
         class T, class U, class... Args
-        , typename = typename std::enable_if< std::is_constructible<T, std::initializer_list<U>&, Args...>::value >::type
+        any_REQUIRES_T( std::is_constructible<T, std::initializer_list<U>&, Args&&...>::value )
     >
     void emplace( std::initializer_list<U> il, Args&&... args )
     {
@@ -584,12 +610,13 @@ inline any make_any( std::initializer_list<U> il, Args&& ...args )
 template<
     class ValueType
 #if any_HAVE_DEFAULT_FUNCTION_TEMPLATE_ARG
-    , typename = typename std::enable_if< std::is_reference<ValueType>::value || std::is_copy_constructible<ValueType>::value >::type
+//  any_REQUIRES_T(...) Allow for VC120 (VS2013):
+    , typename = typename std::enable_if< (std::is_reference<ValueType>::value || std::is_copy_constructible<ValueType>::value), nonstd::any_lite::detail::enabler >::type
 #endif
 >
 any_nodiscard inline ValueType any_cast( any const & operand )
 {
-   const ValueType * result = any_cast< typename detail::add_const< typename detail::remove_reference<ValueType>::type >::type >( &operand );
+   const ValueType * result = any_cast< typename std11::add_const< typename std11::remove_reference<ValueType>::type >::type >( &operand );
 
 #if any_CONFIG_NO_EXCEPTIONS
    assert( result );
@@ -606,12 +633,13 @@ any_nodiscard inline ValueType any_cast( any const & operand )
 template<
     class ValueType
 #if any_HAVE_DEFAULT_FUNCTION_TEMPLATE_ARG
-    , typename = typename std::enable_if< std::is_reference<ValueType>::value || std::is_copy_constructible<ValueType>::value >::type
+//  any_REQUIRES_T(...) Allow for VC120 (VS2013):
+    , typename = typename std::enable_if< (std::is_reference<ValueType>::value || std::is_copy_constructible<ValueType>::value), nonstd::any_lite::detail::enabler >::type
 #endif
 >
 any_nodiscard inline ValueType any_cast( any & operand )
 {
-   const ValueType * result = any_cast< typename detail::remove_reference<ValueType>::type >( &operand );
+   const ValueType * result = any_cast< typename std11::remove_reference<ValueType>::type >( &operand );
 
 #if any_CONFIG_NO_EXCEPTIONS
    assert( result );
@@ -630,12 +658,12 @@ any_nodiscard inline ValueType any_cast( any & operand )
 template<
     class ValueType
 #if any_HAVE_DEFAULT_FUNCTION_TEMPLATE_ARG
-    , typename = typename std::enable_if< std::is_reference<ValueType>::value || std::is_copy_constructible<ValueType>::value >::type
+    any_REQUIRES_T( std::is_reference<ValueType>::value || std::is_copy_constructible<ValueType>::value )
 #endif
 >
 any_nodiscard inline ValueType any_cast( any && operand )
 {
-   const ValueType * result = any_cast< typename detail::remove_reference<ValueType>::type >( &operand );
+   const ValueType * result = any_cast< typename std11::remove_reference<ValueType>::type >( &operand );
 
 #if any_CONFIG_NO_EXCEPTIONS
    assert( result );
