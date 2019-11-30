@@ -166,6 +166,14 @@ CASE( "any: Allows to copy-construct from value" )
     EXPECT( any_cast<int>( a ) == i );
 }
 
+CASE( "any: Copy constructs from lvalue references" )
+{
+    std::string i = "Test";
+    any a( i );
+
+    EXPECT( any_cast<std::string>( a ) == i );
+}
+
 CASE( "any: Allows to move-construct from value (C++11)" )
 {
 #if any_CPP11_OR_GREATER

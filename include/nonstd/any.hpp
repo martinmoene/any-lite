@@ -424,7 +424,7 @@ public:
         any_REQUIRES_T( ! std::is_same<T, any>::value )
     >
     any( ValueType && value ) any_noexcept
-    : content( new holder<T>( std::move( value ) ) )
+    : content( new holder<T>( std::forward<ValueType>( value ) ) )
     {}
 
     template<
