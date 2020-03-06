@@ -158,7 +158,7 @@ CASE( "any: Allows to copy-construct from literal value" )
     EXPECT( any_cast<int>( a ) == 7 );
 }
 
-CASE( "any: Allows to copy-construct from value" )
+CASE( "any: Allows to copy-construct from const value" )
 {
     const int i = 7;
     any a( i );
@@ -166,7 +166,7 @@ CASE( "any: Allows to copy-construct from value" )
     EXPECT( any_cast<int>( a ) == i );
 }
 
-CASE( "any: Copy constructs from lvalue references" )
+CASE( "any: Allows to copy-construct from lvalue references" )
 {
     std::string i = "Test";
     any a( i );
