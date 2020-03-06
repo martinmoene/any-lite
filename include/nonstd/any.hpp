@@ -325,7 +325,7 @@ namespace nonstd {
     template< bool B = (__VA_ARGS__), typename std::enable_if<B, int>::type = 0 >
 
 #define any_REQUIRES_T(...) \
-    , typename = typename std::enable_if< (__VA_ARGS__), nonstd::any_lite::detail::enabler >::type
+    , typename std::enable_if< (__VA_ARGS__), int >::type = 0
 
 #define any_REQUIRES_R(R, ...) \
     typename std::enable_if<__VA_ARGS__, R>::type
