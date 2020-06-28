@@ -1,0 +1,4 @@
+[bugtraq]
+	url = https://github.com/martinmoene/any-lite/issues/%BUGID%
+	number = true
+	logregex = "(\\s*(,|and)?\\s*#\\d+)+\n(\\d+)"
