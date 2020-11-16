@@ -107,6 +107,30 @@ CASE( "Presence of C++ library features" "[.stdlibrary]" )
 #else
     any_ABSENT(  _HAS_CPP0X );
 #endif
+
+#ifdef __cpp_exceptions
+    any_PRESENT( __cpp_exceptions );
+#else
+    any_ABSENT(  __cpp_exceptions );
+#endif
+
+#ifdef __EXCEPTIONS
+    any_PRESENT( __EXCEPTIONS );
+#else
+    any_ABSENT(  __EXCEPTIONS );
+#endif
+
+#ifdef _HAS_EXCEPTIONS
+    any_PRESENT( _HAS_EXCEPTIONS );
+#else
+    any_ABSENT(  _HAS_EXCEPTIONS );
+#endif
+
+#ifdef _CPPUNWIND
+    any_PRESENT( _CPPUNWIND );
+#else
+    any_ABSENT(  _CPPUNWIND );
+#endif
 }
 
 int main( int argc, char * argv[] )
