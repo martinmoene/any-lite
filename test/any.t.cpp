@@ -662,4 +662,13 @@ CASE( "any_cast: Throws bad_any_cast with non-empty what()" )
     }
 }
 
+CASE( "tweak header: reads tweak header if supported " "[tweak]" )
+{
+#if any_HAVE_TWEAK_HEADER
+    EXPECT( ANY_TWEAK_VALUE == 42 );
+#else
+    EXPECT( !!"Tweak header is not available (any_HAVE_TWEAK_HEADER: 0)." );
+#endif
+}
+
 // end of file

@@ -26,6 +26,20 @@
 #define any_ANY_NONSTD   1
 #define any_ANY_STD      2
 
+// tweak header support:
+
+#ifdef __has_include
+# if __has_include(<nonstd/any.tweak.hpp>)
+#  include <nonstd/any.tweak.hpp>
+# endif
+#define any_HAVE_TWEAK_HEADER  1
+#else
+#define any_HAVE_TWEAK_HEADER  0
+//# pragma message("any.hpp: Note: Tweak header not supported.")
+#endif
+
+// any selection and configuration:
+
 #if !defined( any_CONFIG_SELECT_ANY )
 # define any_CONFIG_SELECT_ANY  ( any_HAVE_STD_ANY ? any_ANY_STD : any_ANY_NONSTD )
 #endif

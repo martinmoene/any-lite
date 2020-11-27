@@ -238,7 +238,8 @@ any: Allows to default construct any
 any: Allows to copy-construct from any
 any: Allows to move-construct from any (C++11)
 any: Allows to copy-construct from literal value
-any: Allows to copy-construct from value
+any: Allows to copy-construct from const value
+any: Allows to copy-construct from lvalue references
 any: Allows to move-construct from value (C++11)
 any: Allows to in-place construct from literal value (C++11)
 any: Allows to in-place copy-construct from value (C++11)
@@ -272,4 +273,5 @@ any_cast: Throws bad_any_cast if requested type differs from content type (any c
 any_cast: Throws bad_any_cast if requested type differs from content type (any &)
 any_cast: Throws bad_any_cast if requested type differs from content type (any &&)
 any_cast: Throws bad_any_cast with non-empty what()
+tweak header: reads tweak header if supported [tweak]
 ```
