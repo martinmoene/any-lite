@@ -16,9 +16,7 @@
 - [Notes and references](#notes-and-references)
 - [Appendix](#appendix)
 
-
-Example usage
--------------
+## Example usage
 
 ```Cpp
 #include "nonstd/any.hpp"
@@ -43,12 +41,12 @@ int main()
 
 ### Compile and run
 
-```
+```Text
 prompt> g++ -Wall -I../include -o 01-basic 01-basic.cpp && 01-basic
 ```
 
-In a nutshell
--------------
+## In a nutshell
+
 **any lite** is a single-file header-only library to represent a type-safe container for single values of any type. The library aims to provide a [C++17-like any](http://en.cppreference.com/w/cpp/utility/any) for use with C++98 and later. If available, std::any is used.
 
 **Features and properties of any lite** are ease of installation (single header), freedom of dependencies other than the standard library. *any lite* shares the approach to in-place tags with [expected-lite](https://github.com/martinmoene/expected-lite), [optional-lite](https://github.com/martinmoene/optional-lite) and with [variant-lite](https://github.com/martinmoene/variant-lite) and these libraries can be used together.
@@ -56,23 +54,19 @@ In a nutshell
 **Limitations of any lite** are the absence of small-object optimization: all contained objects are dynamically allocated. Move construction, move assignment and emplacement require C++11 and are not supported when compiling under C++98.
 
 
-License
--------
+## License
+
 *any lite* is distributed under the [Boost Software License](https://github.com/martinmoene/any-lite/blob/master/LICENSE.txt).
 
+## Dependencies
 
-Dependencies
-------------
 *any lite* has no other dependencies than the [C++ standard library](http://en.cppreference.com/w/cpp/header).
 
+## Installation
 
-Installation
-------------
 *any lite* is a single-file header-only library. Put `any.hpp` in the [include](include) folder directly into the project source tree or somewhere reachable from your project.
 
-
-Synopsis
---------
+## Synopsis
 
 **Contents**  
 - [Types in namespace nonstd](#types-in-namespace-nonstd)  
@@ -135,22 +129,24 @@ Synopsis
 
 If the compiler supports [`__has_include()`](https://en.cppreference.com/w/cpp/preprocessor/include), *any lite* supports the [tweak header](https://vector-of-bool.github.io/2020/10/04/lib-configuration.html) mechanism. Provide your *tweak header* as `nonstd/any.tweak.hpp` in a folder in the include-search-path. In the tweak header, provide definitions as documented below, like `#define any_CPLUSPLUS 201103L`.
 #### Standard selection macro
+
 \-D<b>any\_CPLUSPLUS</b>=199711L  
 Define this macro to override the auto-detection of the supported C++ standard, if your compiler does not set the `__cpluplus` macro correctly.
 
 #### Select `std::any` or `nonstd::any`
+
 At default, *any lite* uses `std::any` if it is available and lets you use it via namespace `nonstd`. You can however override this default and explicitly request to use `std::any` or any lite's `nonstd::any` as `nonstd::any` via the following macros.
 
 -D<b>any\_CONFIG\_SELECT\_ANY</b>=any_ANY_DEFAULT  
 Define this to `any_ANY_STD` to select `std::any` as `nonstd::any`. Define this to `any_ANY_NONSTD` to select `nonstd::any` as `nonstd::any`. Default is undefined, which has the same effect as defining to `any_ANY_DEFAULT`.
 
 #### Disable exceptions
+
 -D<b>any_CONFIG_NO_EXCEPTIONS</b>=0
 Define this to 1 if you want to compile without exceptions. If not defined, the header tries and detect if exceptions have been disabled (e.g. via `-fno-exceptions`). Default is undefined.
 
+## Reported to work with
 
-Reported to work with
----------------------
 The table below mentions the compiler versions *any lite* is reported to work with.
 
 OS        | Compiler   | Versions |
@@ -162,9 +158,8 @@ GNU/Linux | Clang/LLVM | 3.5.0 |
 &nbsp;    | GCC        | 4.8.4 |
 OS X      | ?          | ?   |
 
+## Building the tests
 
-Building the tests
-------------------
 To build the tests you need:
 
 - [Buck](https://buckbuild.com/) or [CMake](http://cmake.org) version 2.8.12 or later to be installed and in your PATH.
@@ -176,7 +171,7 @@ The following steps assume that the [*any lite* source code](https://github.com/
 
 ### Buck
 
-```
+```Text
 any-lite> buck run test/
 ```
 
@@ -203,15 +198,13 @@ Here we use c:\any-lite\build-win-x86-vc10.
 
 All tests should pass, indicating your platform is supported and you are ready to use *any lite*.
 
+## Other implementations of any
 
-Other implementations of any
-----------------------------
 - Isabella Muerte. [MNMLSTC Core](https://github.com/mnmlstc/core) (C++11).
 - Kevlin Henney. [Boost.Any](http://www.boost.org/doc/libs/1_62_0/doc/html/any.html). Safe, generic container for single values of different value types. 2001.
 
+## Notes and References
 
-Notes and References
---------------------
 [1] CppReference. [Any](http://en.cppreference.com/w/cpp/utility/any).  
 
 [2] ISO/IEC WG21. [N4606, section 20.8 Storage for any type](http://wg21.link/n4606). July 2016.
@@ -226,9 +219,7 @@ Notes and References
 
 [7] Kevlin Henney. [Idioms. Breaking the Language Barrier](http://www.two-sdg.demon.co.uk/curbralan/papers/accu/Idioms.pdf#page=32) (PDF). Presented at the ACCU's C and C++ European Developers Forum, the Oxford Union, Oxford, UK, 12th September 1998.
 
-
-Appendix
---------
+## Appendix
 
 ### A.1 Compile-time information
 
@@ -236,7 +227,7 @@ The version of *any lite* is available via tag `[.version]`. The following tags 
 
 ### A.2 Any lite test specification
 
-```
+```Text
 any: Allows to default construct any
 any: Allows to copy-construct from any
 any: Allows to move-construct from any (C++11)
