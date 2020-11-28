@@ -78,7 +78,7 @@ Synopsis
 - [Types in namespace nonstd](#types-in-namespace-nonstd)  
 - [Interface of *any lite*](#interface-of-any-lite)  
 - [Algorithms for *any lite*](#algorithms-for-any-lite)  
-- [Configuration macros](#configuration-macros)
+- [Configuration](#configuration)
 
 ### Types and values in namespace nonstd
 
@@ -129,8 +129,11 @@ Synopsis
 | &nbsp;                    |&nbsp;| T \* **any_cast&lt;T>**( any * )     | pointer to obtained value |
 | Swap                      |&nbsp;| void **swap**( any & x, any & y ) | exchange contents |
 
-### Configuration macros
+### Configuration
 
+#### Tweak header
+
+If the compiler supports [`__has_include()`](https://en.cppreference.com/w/cpp/preprocessor/include), *any lite* supports the [tweak header](https://vector-of-bool.github.io/2020/10/04/lib-configuration.html) mechanism. Provide your *tweak header* as `nonstd/any.tweak.hpp` in a folder in the include-search-path. In the tweak header, provide definitions as documented below, like `#define any_CPLUSPLUS 201103L`.
 #### Standard selection macro
 \-D<b>any\_CPLUSPLUS</b>=199711L  
 Define this macro to override the auto-detection of the supported C++ standard, if your compiler does not set the `__cpluplus` macro correctly.
