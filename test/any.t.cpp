@@ -671,4 +671,20 @@ CASE( "tweak header: reads tweak header if supported " "[tweak]" )
 #endif
 }
 
+// Issues:
+
+CASE( "any: operator=( T && value ) " "[.issue-9]" )
+{
+#if any_CPP11_OR_GREATER
+    any var;
+    std::string s = "42";
+
+    var = s;
+
+   EXPECT( any_cast<std::string>( var ) == s );
+#else
+    EXPECT( !!"any: issue-9 only occurs with C++11 and later (no C++11)" );
+#endif
+}
+
 // end of file
