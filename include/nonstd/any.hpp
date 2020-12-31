@@ -493,7 +493,7 @@ public:
         class ValueType, class T = typename std::decay<ValueType>::type
         any_REQUIRES_T( ! std::is_same<T, any>::value )
     >
-    any & operator=( ValueType && value )
+    any & operator=( T && value )
     {
         any( std::move( value ) ).swap( *this );
         return *this;
