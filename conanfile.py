@@ -1,7 +1,7 @@
 from conans import ConanFile, CMake
 
 class AnyLiteConan(ConanFile):
-    version = "0.3.0"
+    version = "0.4.0"
     name = "any-lite"
     description = "A single-file header-only C++17-like any, a type-safe container for single values of any type for C++98, C++11 and later"
     license = "Boost Software License - Version 1.0. http://www.boost.org/LICENSE_1_0.txt"
