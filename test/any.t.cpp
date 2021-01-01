@@ -339,11 +339,17 @@ CASE( "any: Allows to copy-assign from literal value" )
 CASE( "any: Allows to copy-assign from value" )
 {
     const int i = 7;
+    std::string s = "42";
+
     any a;
 
     a = i;
 
     EXPECT( any_cast<int>( a ) == i );
+
+    a = s;
+
+    EXPECT( any_cast<std::string>( a ) == s );
 }
 
 CASE( "any: Allows to move-assign from value (C++11)" )
@@ -672,19 +678,5 @@ CASE( "tweak header: reads tweak header if supported " "[tweak]" )
 }
 
 // Issues:
-
-CASE( "any: operator=( T && value ) " "[.issue-9]" )
-{
-#if any_CPP11_OR_GREATER
-    any var;
-    std::string s = "42";
-
-    var = s;
-
-   EXPECT( any_cast<std::string>( var ) == s );
-#else
-    EXPECT( !!"any: issue-9 only occurs with C++11 and later (no C++11)" );
-#endif
-}
 
 // end of file
