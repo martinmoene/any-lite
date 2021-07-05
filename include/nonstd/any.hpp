@@ -266,6 +266,7 @@ namespace nonstd {
 #define any_HAVE_TYPE_TRAITS            any_CPP11_90
 #define any_HAVE_STATIC_ASSERT          any_CPP11_100
 #define any_HAVE_ADD_CONST              any_CPP11_90
+#define any_HAVE_OVERRIDE               any_CPP11_90
 #define any_HAVE_REMOVE_REFERENCE       any_CPP11_90
 
 #define any_HAVE_TR1_ADD_CONST          (!! any_COMPILER_GNUC_VERSION )
@@ -310,6 +311,12 @@ namespace nonstd {
 # define any_nodiscard [[nodiscard]]
 #else
 # define any_nodiscard /*[[nodiscard]]*/
+#endif
+
+#if any_HAVE_OVERRIDE
+# define any_override override
+#else
+# define any_override /*override*/
 #endif
 
 // additional includes:
@@ -407,7 +414,7 @@ class bad_any_cast : public std::bad_cast
 {
 public:
 #if any_CPP11_OR_GREATER
-    virtual const char* what() const any_noexcept
+    virtual const char* what() const any_noexcept any_override
 #else
     virtual const char* what() const throw()
 #endif
@@ -588,12 +595,12 @@ private:
         {}
 #endif
 
-        virtual std::type_info const & type() const
+        virtual std::type_info const & type() const any_override
         {
             return typeid( ValueType );
         }
 
-        virtual placeholder * clone() const
+        virtual placeholder * clone() const any_override
         {
             return new holder( held );
         }
