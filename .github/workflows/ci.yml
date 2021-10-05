@@ -69,3 +69,26 @@ jobs:
         working-directory: build
         run: ctest --output-on-failure -j 4
 
+  msvc:
+    strategy:
+      matrix:
+        os: [windows-2016, windows-2019]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Configure tests
+        run: cmake -S . -B build
+          -D ANY_LITE_OPT_SELECT_NONSTD=ON
+          -D ANY_LITE_OPT_BUILD_TESTS=ON
+          -D ANY_LITE_OPT_BUILD_EXAMPLES=OFF
+
+      - name: Build tests
+        run: cmake --build build --config Release -j 4
+
+      - name: Run tests
+        working-directory: build
+        run: ctest -C Release --output-on-failure -j 4
+
