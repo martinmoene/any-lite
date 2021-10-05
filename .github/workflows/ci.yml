@@ -3,6 +3,7 @@ name: CI
 on:
   push:
     branches: [ master ]
+
   pull_request:
     branches: [ master ]
 
@@ -37,3 +38,34 @@ jobs:
       - name: Run tests
         working-directory: build
         run: ctest --output-on-failure -j 4
+
+  clang:
+    strategy:
+      matrix:
+        version: [8, 9, 10, 11, 12]
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Clang ${{ matrix.version }}
+        run: sudo apt-get install -y clang-${{ matrix.version }}
+
+      - name: Configure tests
+        env:
+          CXX: clang-${{ matrix.version }}
+        run: cmake -S . -B build
+          -D CMAKE_CXX_COMPILER=clang++
+          -D CMAKE_BUILD_TYPE:STRING=Release
+          -D ANY_LITE_OPT_SELECT_NONSTD=ON
+          -D ANY_LITE_OPT_BUILD_TESTS=ON
+          -D ANY_LITE_OPT_BUILD_EXAMPLES=OFF
+
+      - name: Build tests
+        run: cmake --build build -j 4
+
+      - name: Run tests
+        working-directory: build
+        run: ctest --output-on-failure -j 4
+
