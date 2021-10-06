@@ -1,5 +1,8 @@
 name: CI
 
+env:
+  PROJECT: ANY_LITE
+
 on:
   push:
     branches: [ master ]
@@ -28,9 +31,9 @@ jobs:
           CXX: g++-${{ matrix.version }}
         run: cmake -S . -B build
           -D CMAKE_BUILD_TYPE:STRING=Release
-          -D ANY_LITE_OPT_SELECT_NONSTD=ON
-          -D ANY_LITE_OPT_BUILD_TESTS=ON
-          -D ANY_LITE_OPT_BUILD_EXAMPLES=OFF
+          -D ${{ env.PROJECT }}_OPT_SELECT_NONSTD=ON
+          -D ${{ env.PROJECT }}_OPT_BUILD_TESTS=ON
+          -D ${{ env.PROJECT }}_OPT_BUILD_EXAMPLES=OFF
 
       - name: Build tests
         run: cmake --build build -j 4
@@ -58,9 +61,9 @@ jobs:
         run: cmake -S . -B build
           -D CMAKE_CXX_COMPILER=clang++
           -D CMAKE_BUILD_TYPE:STRING=Release
-          -D ANY_LITE_OPT_SELECT_NONSTD=ON
-          -D ANY_LITE_OPT_BUILD_TESTS=ON
-          -D ANY_LITE_OPT_BUILD_EXAMPLES=OFF
+          -D ${{ env.PROJECT }}_OPT_SELECT_NONSTD=ON
+          -D ${{ env.PROJECT }}_OPT_BUILD_TESTS=ON
+          -D ${{ env.PROJECT }}_OPT_BUILD_EXAMPLES=OFF
 
       - name: Build tests
         run: cmake --build build -j 4
@@ -81,9 +84,9 @@ jobs:
 
       - name: Configure tests
         run: cmake -S . -B build
-          -D ANY_LITE_OPT_SELECT_NONSTD=ON
-          -D ANY_LITE_OPT_BUILD_TESTS=ON
-          -D ANY_LITE_OPT_BUILD_EXAMPLES=OFF
+          -D ${{ env.PROJECT }}_OPT_SELECT_NONSTD=ON
+          -D ${{ env.PROJECT }}_OPT_BUILD_TESTS=ON
+          -D ${{ env.PROJECT }}_OPT_BUILD_EXAMPLES=OFF
 
       - name: Build tests
         run: cmake --build build --config Release -j 4
