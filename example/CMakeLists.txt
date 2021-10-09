@@ -19,6 +19,31 @@ message( STATUS "Subproject '${PROJECT_NAME}', examples '${PROGRAM}-*'")
 
 set( OPTIONS "" )
 
+# Sources (.cpp), normal and no-exception, and their base names:
+
+set( SOURCES
+    01-basic.cpp
+    02-property.cpp
+    03-example.cpp
+    04-any-variant.cpp
+    05-no-exceptions.cpp
+)
+
+set( SOURCES_NE
+    05-no-exceptions.cpp
+)
+
+string( REPLACE ".cpp" "" BASENAMES    "${SOURCES}" )
+string( REPLACE ".cpp" "" BASENAMES_NE "${SOURCES_NE}" )
+
+macro( ternary var boolean value1 value2 )
+    if( ${boolean} )
+        set( ${var} ${value1} )
+    else()
+        set( ${var} ${value2} )
+    endif()
+endmacro()
+
 if( MSVC )
     message( STATUS "Matched: MSVC")
 
@@ -42,21 +67,25 @@ else()
 endif()
 
 function( make_target name no_exceptions )
-    add_executable             ( ${PROGRAM}-${name} ${name}.cpp )
-    target_include_directories ( ${PROGRAM}-${name} PRIVATE ../../variant-lite/include )
-    target_link_libraries      ( ${PROGRAM}-${name} PRIVATE ${PACKAGE} )
+    ternary( ne no_exceptions "-ne" "" )
+
+    add_executable             ( ${PROGRAM}-${name}${ne} ${name}.cpp )
+    target_include_directories ( ${PROGRAM}-${name}${ne} PRIVATE ../../variant-lite/include )
+    target_link_libraries      ( ${PROGRAM}-${name}${ne} PRIVATE ${PACKAGE} )
     if ( no_exceptions )
-        target_compile_options ( ${PROGRAM}-${name} PRIVATE ${NO_EXCEPTIONS_OPTIONS} )
+        target_compile_options ( ${PROGRAM}-${name}${ne} PRIVATE ${NO_EXCEPTIONS_OPTIONS} )
     else()
-        target_compile_options ( ${PROGRAM}-${name} PRIVATE ${EXCEPTIONS_OPTIONS} )
+        target_compile_options ( ${PROGRAM}-${name}${ne} PRIVATE ${EXCEPTIONS_OPTIONS} )
     endif()
 
 endfunction()
 
-make_target( 01-basic FALSE )
-make_target( 02-property FALSE )
-make_target( 03-example FALSE )
-make_target( 04-any-variant FALSE )
-make_target( 05-no-exceptions FALSE )
+foreach( target ${BASENAMES} )
+    make_target( ${target} FALSE )
+endforeach()
+
+foreach( target ${BASENAMES_NE} )
+    make_target( ${target} TRUE )
+endforeach()
 
 # end of file
