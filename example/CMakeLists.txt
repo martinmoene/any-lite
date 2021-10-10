@@ -17,7 +17,10 @@ set( PROGRAM   ${unit_name}-lite )
 
 message( STATUS "Subproject '${PROJECT_NAME}', examples '${PROGRAM}-*'")
 
+# Target default options and definitions:
+
 set( OPTIONS "" )
+#set( DEFINITIONS "" )
 
 # Sources (.cpp), normal and no-exception, and their base names:
 
@@ -35,14 +38,6 @@ set( SOURCES_NE
 
 string( REPLACE ".cpp" "" BASENAMES    "${SOURCES}" )
 string( REPLACE ".cpp" "" BASENAMES_NE "${SOURCES_NE}" )
-
-macro( ternary var boolean value1 value2 )
-    if( ${boolean} )
-        set( ${var} ${value1} )
-    else()
-        set( ${var} ${value2} )
-    endif()
-endmacro()
 
 # Determine options:
 
@@ -68,6 +63,16 @@ else()
     message( STATUS "Matched: nothing")
 endif()
 
+# Function to emulate ternary operaton `result = b ? x : y`:
+
+macro( ternary var boolean value1 value2 )
+    if( ${boolean} )
+        set( ${var} ${value1} )
+    else()
+        set( ${var} ${value2} )
+    endif()
+endmacro()
+
 # Function to create a target:
 
 function( make_target name no_exceptions )
@@ -84,7 +89,7 @@ function( make_target name no_exceptions )
 
 endfunction()
 
-# Targets:
+# Create targets:
 
 foreach( target ${BASENAMES} )
     make_target( ${target} FALSE )
