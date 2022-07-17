@@ -196,6 +196,10 @@ namespace nonstd {
 
 #else // any_USES_STD_ANY
 
+#if !any_CPP11_OR_GREATER
+#include <algorithm>    // std::swap()
+#endif
+
 #include <utility>
 
 // Compiler versions:
