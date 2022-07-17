@@ -99,7 +99,7 @@ prompt> g++ -Wall -I../include -o 01-basic 01-basic.cpp && 01-basic
 | &nbsp;       | C++11| template< class T, class U, class... Args ><br>explicit **any**( in_place_type_t&lt;T>, std::initializer_list&lt;U> il, Args&&... args ) | in-place-construct type T |
 | &nbsp;       |<C++11| template< class ValueType ><br>**any**( ValueType const & value ) | copy-assign from value |
 | &nbsp;       |&nbsp;| ~**any**() | destroy current object |
-| Assignment    |&nbsp;| any & **operator=**( any const & rhs ) | copy-assign from other |
+| Assignment   |&nbsp;| any & **operator=**( any const & rhs ) | copy-assign from other |
 | &nbsp;       | C++11| any & **operator=**( any && rhs ) noexcept | move-assign from other |
 | &nbsp;       | C++11| template< class ValueType, ...><br>any & **operator=**( ValueType && rhs ) | (move-)assign from value |
 | &nbsp;       |<C++11| template< class ValueType ><br>any & **operator=**( ValueType const & rhs ) | copy-assign from value |
