@@ -1,4 +1,4 @@
-# Copyright 2018 by Martin Moene
+# Copyright 2018-2022 by Martin Moene
 #
 # https://github.com/martinmoene/any-lite
 #
@@ -11,7 +11,7 @@ endif()
 
 project( test LANGUAGES CXX )
 
-set( unit_name "any" )
+# unit_name provided by toplevel CMakeLists.txt [set( unit_name "xxx" )]
 set( PACKAGE   ${unit_name}-lite )
 set( PROGRAM   ${unit_name}-lite )
 set( SOURCES   ${unit_name}-main.t.cpp ${unit_name}.t.cpp )
@@ -211,8 +211,6 @@ if( HAS_CPP17_FLAG )
 endif()
 
 # configure unit tests via CTest:
-
-enable_testing()
 
 if( HAS_STD_FLAGS )
     # unconditionally add C++98 variant for MSVC:
