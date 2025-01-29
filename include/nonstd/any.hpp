@@ -44,6 +44,14 @@
 # define any_CONFIG_SELECT_ANY  ( any_HAVE_STD_ANY ? any_ANY_STD : any_ANY_NONSTD )
 #endif
 
+// Control marking class bad_any_cast and function any_cast with [[nodiscard]]]:
+
+#if !defined(any_CONFIG_NO_NODISCARD)
+# define any_CONFIG_NO_NODISCARD  0
+#else
+# define any_CONFIG_NO_NODISCARD  1
+#endif
+
 // Control presence of exception handling (try and auto discover):
 
 #ifndef any_CONFIG_NO_EXCEPTIONS
@@ -312,7 +320,7 @@ namespace nonstd {
 # define any_nullptr NULL
 #endif
 
-#if any_HAVE_NODISCARD
+#if any_HAVE_NODISCARD && !any_CONFIG_NO_NODISCARD
 # define any_nodiscard [[nodiscard]]
 #else
 # define any_nodiscard /*[[nodiscard]]*/
@@ -415,7 +423,7 @@ namespace detail {
 
 #if ! any_CONFIG_NO_EXCEPTIONS
 
-class bad_any_cast : public std::bad_cast
+class any_nodiscard bad_any_cast : public std::bad_cast
 {
 public:
 #if any_CPP11_OR_GREATER

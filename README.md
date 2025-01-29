@@ -145,6 +145,11 @@ Define this to `any_ANY_STD` to select `std::any` as `nonstd::any`. Define this 
 -D<b>any_CONFIG_NO_EXCEPTIONS</b>=0
 Define this to 1 if you want to compile without exceptions. If not defined, the header tries and detect if exceptions have been disabled (e.g. via `-fno-exceptions`). Default is undefined.
 
+#### Disable \[\[nodiscard\]\]
+
+-D<b>any\_CONFIG\_NO\_NODISCARD</b>=0
+Define this to 1 if you want to compile without \[\[nodiscard\]\]. Note that the default of marking `class bad_any_cast` and function `any_cast()` with \[\[nodiscard\]\] is not part of the C++17 standard. The rationale to use \[\[nodiscard\]\] is that unnoticed discarded error values may break the error handling flow.
+
 ## Reported to work with
 
 The table below mentions the compiler versions *any lite* is reported to work with.
